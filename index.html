@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="theme-color" content="#f9d7eb" />
-<title>Brookside Pocket V3</title>
+<title>Brookside Pocket V3.1</title>
 <style>
 :root{
   --ink:#3f3152;
@@ -164,7 +164,7 @@ button:active{transform:translate(4px,4px);box-shadow:none}
 <body>
 <div class="app">
   <div class="shell">
-    <div class="status"><span>BROOKSIDE POCKET V3</span><span id="clock">11:11</span></div>
+    <div class="status"><span>BROOKSIDE POCKET V3.1</span><span id="clock">11:11</span></div>
     <header class="header">
       <div class="kicker">a tiny town in your pocket</div>
       <h1>Brookside</h1>
@@ -863,27 +863,73 @@ function updateStuffCount(){
 }
 function maybeCollect(containerId){
   if(Math.random() > .38) return;
-  const item=pick(collectibles);
+
   const inventory=getInventory();
-  const already=inventory.some(x=>x.name===item.name);
+  const available=collectibles.filter(item => !inventory.some(x => x.name===item.name));
+  if(!available.length) return;
+
+  const item=pick(available);
   const box=document.getElementById(containerId);
-  if(!box || already) return;
+  if(!box) return;
+
   const wrap=document.createElement("div");
   wrap.className="collectible";
-  wrap.innerHTML=`
-    <span class="label">✨ You found something!</span>
-    <div class="bigicon">${item.icon}</div>
-    <h3>${item.name}</h3>
-    <div class="badge">${item.type}</div>
-    <p>A tiny Brookside collectible.</p>
-    <button class="btn-yellow small" onclick='keepCollectible(${JSON.stringify(item)},this)'>🎒 KEEP IT</button>`;
+
+  const label=document.createElement("span");
+  label.className="label";
+  label.textContent="✨ You found something!";
+
+  const icon=document.createElement("div");
+  icon.className="bigicon";
+  icon.textContent=item.icon;
+
+  const title=document.createElement("h3");
+  title.textContent=item.name;
+
+  const badge=document.createElement("div");
+  badge.className="badge";
+  badge.textContent=item.type;
+
+  const desc=document.createElement("p");
+  desc.textContent="A tiny Brookside collectible.";
+
+  const button=document.createElement("button");
+  button.className="btn-yellow small";
+  button.textContent="🎒 KEEP IT";
+  button.addEventListener("click", function(){
+    keepCollectible(item, button, wrap);
+  });
+
+  wrap.append(label,icon,title,badge,desc,button);
   box.appendChild(wrap);
 }
-function keepCollectible(item,button){
+
+function keepCollectible(item,button,wrap){
   const inv=getInventory();
-  if(!inv.some(x=>x.name===item.name)){inv.push(item);saveInventory(inv)}
-  button.textContent="✓ IN MY STUFF";
+
+  if(!inv.some(x=>x.name===item.name)){
+    inv.push(item);
+    try{
+      localStorage.setItem("brooksideInventory",JSON.stringify(inv));
+    }catch(e){
+      alert("Brookside couldn't save this collectible on this browser.");
+      return;
+    }
+  }
+
+  updateStuffCount();
+  button.textContent="✓ SAVED TO MY STUFF";
   button.disabled=true;
+
+  let confirmation=wrap.querySelector(".save-confirmation");
+  if(!confirmation){
+    confirmation=document.createElement("p");
+    confirmation.className="save-confirmation";
+    confirmation.style.fontWeight="900";
+    confirmation.style.marginBottom="0";
+    confirmation.textContent="♡ It’s in your Brookside bag.";
+    wrap.appendChild(confirmation);
+  }
 }
 function openStuff(){
   show("stuff");
