@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#f7d7ec" />
+<title>Brookside Adventure</title>
+
+<style>
+  :root{
+    --ink:#3e3150;
+    --purple:#76558f;
+    --purple-dark:#5c3e76;
+    --pink:#f4c9df;
+    --pink-soft:#fff3f8;
+    --blue:#cfe7f4;
+    --green:#d8ebcf;
+    --cream:#fffaf2;
+    --paper:#fffdf9;
+    --line:#d8cade;
+    --shadow:rgba(62,49,80,.14);
+  }
+
+  *{box-sizing:border-box}
+
+  html,body{
+    margin:0;
+    min-height:100%;
+    background:
+      radial-gradient(circle at 18px 18px, rgba(118,85,143,.08) 2px, transparent 2.5px) 0 0/36px 36px,
+      linear-gradient(180deg,#fff7fb,#f8f4ff);
+    color:var(--ink);
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+  body{
+    display:flex;
+    justify-content:center;
+    padding:18px 12px 36px;
+  }
+
+  .app{
+    width:min(100%,430px);
+  }
+
+  .phone-card{
+    background:var(--paper);
+    border:3px solid var(--ink);
+    border-radius:28px;
+    overflow:hidden;
+    box-shadow:8px 10px 0 rgba(118,85,143,.15);
+  }
+
+  .status{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:10px 16px 8px;
+    font-size:12px;
+    font-weight:700;
+    background:var(--pink);
+    border-bottom:2px solid var(--ink);
+  }
+
+  .brand{
+    text-align:center;
+    padding:22px 20px 16px;
+    background:
+      linear-gradient(135deg,rgba(255,255,255,.5),rgba(255,255,255,0)),
+      var(--cream);
+  }
+
+  .brand .tiny{
+    font-size:11px;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    font-weight:800;
+    color:var(--purple);
+  }
+
+  h1{
+    margin:6px 0 4px;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size:36px;
+    line-height:1;
+    letter-spacing:-1px;
+  }
+
+  .tagline{
+    margin:0;
+    font-size:14px;
+    color:#6d6176;
+  }
+
+  .content{
+    padding:18px;
+  }
+
+  .empty{
+    padding:26px 18px;
+    text-align:center;
+    border:2px dashed var(--line);
+    border-radius:18px;
+    background:var(--pink-soft);
+    margin-bottom:16px;
+  }
+
+  .empty .big{
+    font-size:36px;
+    margin-bottom:8px;
+  }
+
+  .empty p{
+    margin:4px 0;
+    line-height:1.45;
+  }
+
+  .result{
+    display:none;
+    margin-bottom:16px;
+  }
+
+  .stamp{
+    display:inline-block;
+    padding:7px 10px;
+    border:2px solid var(--ink);
+    border-radius:999px;
+    background:var(--blue);
+    font-size:12px;
+    font-weight:800;
+    margin-bottom:12px;
+  }
+
+  .character{
+    font-family:Georgia, "Times New Roman", serif;
+    font-size:29px;
+    margin:0 0 2px;
+  }
+
+  .location{
+    font-size:15px;
+    font-weight:800;
+    color:var(--purple-dark);
+    margin-bottom:16px;
+  }
+
+  .prompt-card{
+    border:2px solid var(--ink);
+    border-radius:18px;
+    padding:15px;
+    background:#fff;
+    margin:10px 0;
+    box-shadow:3px 3px 0 var(--pink);
+  }
+
+  .prompt-card.alt{
+    box-shadow:3px 3px 0 var(--green);
+  }
+
+  .label{
+    display:block;
+    font-size:10px;
+    letter-spacing:1.4px;
+    text-transform:uppercase;
+    font-weight:900;
+    color:var(--purple);
+    margin-bottom:5px;
+  }
+
+  .prompt-card p{
+    margin:0;
+    line-height:1.45;
+    font-size:15px;
+  }
+
+  .next-result{
+    display:none;
+    border:2px solid var(--ink);
+    border-radius:18px;
+    background:var(--cream);
+    padding:16px;
+    margin:14px 0 0;
+  }
+
+  .next-result .arrow{
+    font-size:22px;
+    margin-right:4px;
+  }
+
+  .next-result p{
+    margin:5px 0 0;
+    font-size:16px;
+    line-height:1.45;
+    font-weight:700;
+  }
+
+  .buttons{
+    display:grid;
+    gap:10px;
+  }
+
+  button{
+    appearance:none;
+    width:100%;
+    border:3px solid var(--ink);
+    border-radius:16px;
+    padding:15px 14px;
+    font-size:14px;
+    font-weight:900;
+    letter-spacing:.4px;
+    color:var(--ink);
+    cursor:pointer;
+    box-shadow:4px 4px 0 var(--ink);
+    transition:transform .08s ease, box-shadow .08s ease;
+  }
+
+  button:active{
+    transform:translate(4px,4px);
+    box-shadow:0 0 0 var(--ink);
+  }
+
+  #startBtn{
+    background:var(--pink);
+  }
+
+  #nextBtn{
+    background:var(--green);
+    display:none;
+  }
+
+  #rerollBtn{
+    background:var(--blue);
+    display:none;
+  }
+
+  .footer{
+    text-align:center;
+    font-size:11px;
+    color:#756b7e;
+    padding:15px 8px 4px;
+  }
+
+  .mini-dots{
+    text-align:center;
+    letter-spacing:7px;
+    color:var(--purple);
+    margin:0 0 8px;
+  }
+
+  @media (max-width:360px){
+    h1{font-size:31px}
+    .content{padding:15px}
+  }
+</style>
+</head>
+
+<body>
+<div class="app">
+  <div class="phone-card">
+    <div class="status">
+      <span>BROOKSIDE</span>
+      <span id="clock">11:11</span>
+    </div>
+
+    <header class="brand">
+      <div class="tiny">tiny town adventure generator</div>
+      <h1>Brookside</h1>
+      <p class="tagline">What are we doing today?</p>
+    </header>
+
+    <main class="content">
+
+      <div class="empty" id="emptyState">
+        <div class="big">☁️✨</div>
+        <p><strong>No plans yet.</strong></p>
+        <p>Roll a little Brookside adventure and see where the day takes you.</p>
+      </div>
+
+      <section class="result" id="result">
+        <div class="stamp" id="timeWeather"></div>
+
+        <h2 class="character" id="character"></h2>
+        <div class="location" id="location"></div>
+
+        <div class="prompt-card">
+          <span class="label">Why are you here?</span>
+          <p id="reason"></p>
+        </div>
+
+        <div class="prompt-card alt">
+          <span class="label">Do this</span>
+          <p id="activity"></p>
+        </div>
+
+        <div class="prompt-card">
+          <span class="label">Little detail</span>
+          <p id="detail"></p>
+        </div>
+
+        <div class="next-result" id="nextResult">
+          <span class="label"><span class="arrow">→</span> What happens next?</span>
+          <p id="nextText"></p>
+        </div>
+      </section>
+
+      <div class="buttons">
+        <button id="startBtn">🎲 START AN ADVENTURE</button>
+        <button id="nextBtn">➡️ WHAT HAPPENS NEXT?</button>
+        <button id="rerollBtn">↻ START OVER</button>
+      </div>
+    </main>
+  </div>
+
+  <div class="footer">
+    <div class="mini-dots">★ • ♡ • ★</div>
+    a tiny day in Brookside
+  </div>
+</div>
+
+<script>
+const characters = [
+  "Lucy Bennet",
+  "Clarissa",
+  "Tailia",
+  "Lea Grace",
+  "Delilah",
+  "Nevaeh",
+  "Winnie Brooks",
+  "Clara June",
+  "Bonnie Bea",
+  "Piper McKay",
+  "Hart Chapman",
+  "Brittney Paige"
+];
+
+const locations = [
+  "📚 Brookside Library",
+  "☕ Paws Coffee",
+  "📖 Rabbit & Ink Bookshop",
+  "🛍️ The Thrift Store",
+  "🌿 Nature Center",
+  "🪞 Nevaeh's Antique Shop",
+  "🎨 Community Arts & Recreation Center",
+  "🖼️ Delilah's Art Gallery",
+  "🐾 Animal Rescue",
+  "🏛️ Children's Museum",
+  "🦴 Natural History Museum"
+];
+
+const reasons = [
+  "You had a little time to kill before heading home.",
+  "A friend texted and asked if you wanted to meet up.",
+  "You needed to return something and decided not to rush.",
+  "You heard there might be something interesting happening today.",
+  "You wanted to get out of the house for a bit.",
+  "You were already nearby and decided to stop in.",
+  "You promised yourself one small fun thing after work.",
+  "You came in looking for one specific thing.",
+  "You had no real plan and wandered in anyway.",
+  "Someone mentioned this place earlier and it stuck in your head."
+];
+
+const activities = [
+  "Look around until one thing catches your attention. Decide what it is.",
+  "Pick out something small to bring home or remember.",
+  "Check the community board and choose one thing you'd actually attend.",
+  "Make up one tiny interaction with someone who works here.",
+  "Find something that reminds you of another Brookside character.",
+  "Choose one object, book, snack, craft, or trinket that becomes part of today's story.",
+  "Stay awhile instead of rushing to the next thing.",
+  "Take a pretend photo for today's Brookside photo dump.",
+  "Roll or choose something from this location's physical notebook.",
+  "Decide what your character is carrying when they leave."
+];
+
+const details = [
+  "It's lightly raining outside.",
+  "The afternoon sun is making everything feel extra cozy.",
+  "Someone has put up a new handmade flyer nearby.",
+  "You can hear music playing quietly in the background.",
+  "You keep running into the color pink today.",
+  "You notice someone left a stack of free stickers.",
+  "There's an oddly specific seasonal drink or snack available.",
+  "The town feels unusually busy today.",
+  "You spot someone you know across the room.",
+  "You find a tiny handwritten note tucked somewhere unexpected.",
+  "It's the kind of day where nobody seems in a hurry.",
+  "You suddenly remember something you meant to do earlier."
+];
+
+const times = [
+  "9:18 AM",
+  "10:42 AM",
+  "11:27 AM",
+  "12:16 PM",
+  "1:38 PM",
+  "2:54 PM",
+  "3:42 PM",
+  "4:17 PM",
+  "5:26 PM",
+  "6:11 PM"
+];
+
+const weather = [
+  "sunny",
+  "cloudy",
+  "light rain",
+  "breezy",
+  "warm & hazy",
+  "cool & overcast",
+  "perfect windows-open weather"
+];
+
+const nextEvents = [
+  "Someone texts: “Coffee?” Head to Paws Coffee or decide who sent the message.",
+  "You remember you wanted to check the thrift store before heading home.",
+  "You run into someone you know. Pick another Brookside character to join you.",
+  "A flyer catches your eye. There's a small community event happening nearby.",
+  "You're getting hungry. Decide whether to grab a snack, coffee, or head home.",
+  "You realize you're not quite ready to go home yet. Roll another location.",
+  "Someone recommends a book, object, place, or activity you wouldn't have picked yourself.",
+  "You find something that belongs to another character. Decide whether to return it now.",
+  "Your phone buzzes with a low-stakes favor from a friend.",
+  "You hear that something new was just put out at Rabbit & Ink.",
+  "You decide to make one quick stop at the library before going home.",
+  "The weather shifts. Your original plan suddenly sounds less appealing.",
+  "You notice a poster for something happening at the Community Arts & Recreation Center.",
+  "You decide this deserves a little treat. Pick where you go next.",
+  "Nothing dramatic happens. You simply stay here a little longer and enjoy it."
+];
+
+function pick(array){
+  return array[Math.floor(Math.random() * array.length)];
+}
+
+function rollAdventure(){
+  document.getElementById("emptyState").style.display = "none";
+  document.getElementById("result").style.display = "block";
+  document.getElementById("nextBtn").style.display = "block";
+  document.getElementById("rerollBtn").style.display = "block";
+  document.getElementById("startBtn").style.display = "none";
+  document.getElementById("nextResult").style.display = "none";
+
+  document.getElementById("character").textContent = pick(characters);
+  document.getElementById("location").textContent = pick(locations);
+  document.getElementById("reason").textContent = pick(reasons);
+  document.getElementById("activity").textContent = pick(activities);
+  document.getElementById("detail").textContent = pick(details);
+  document.getElementById("timeWeather").textContent =
+    pick(times) + " • " + pick(weather);
+}
+
+function rollNext(){
+  document.getElementById("nextText").textContent = pick(nextEvents);
+  document.getElementById("nextResult").style.display = "block";
+  document.getElementById("nextResult").scrollIntoView({
+    behavior:"smooth",
+    block:"nearest"
+  });
+}
+
+function resetAdventure(){
+  document.getElementById("emptyState").style.display = "block";
+  document.getElementById("result").style.display = "none";
+  document.getElementById("nextBtn").style.display = "none";
+  document.getElementById("rerollBtn").style.display = "none";
+  document.getElementById("startBtn").style.display = "block";
+}
+
+function updateClock(){
+  const now = new Date();
+  document.getElementById("clock").textContent =
+    now.toLocaleTimeString([], {hour:"numeric", minute:"2-digit"});
+}
+
+document.getElementById("startBtn").addEventListener("click", rollAdventure);
+document.getElementById("nextBtn").addEventListener("click", rollNext);
+document.getElementById("rerollBtn").addEventListener("click", rollAdventure);
+
+updateClock();
+setInterval(updateClock, 30000);
+</script>
+</body>
+</html>
