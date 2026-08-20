@@ -3,482 +3,706 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<meta name="theme-color" content="#f7d7ec" />
-<title>Brookside Adventure</title>
-
+<meta name="theme-color" content="#f9d7eb" />
+<title>Brookside Pocket V2</title>
 <style>
-  :root{
-    --ink:#3e3150;
-    --purple:#76558f;
-    --purple-dark:#5c3e76;
-    --pink:#f4c9df;
-    --pink-soft:#fff3f8;
-    --blue:#cfe7f4;
-    --green:#d8ebcf;
-    --cream:#fffaf2;
-    --paper:#fffdf9;
-    --line:#d8cade;
-    --shadow:rgba(62,49,80,.14);
-  }
+:root{
+  --ink:#3f3152;
+  --purple:#79599a;
+  --pink:#f6c9df;
+  --pink2:#fff0f7;
+  --blue:#d7ebf7;
+  --green:#dcefd1;
+  --yellow:#fff2b9;
+  --cream:#fffaf2;
+  --paper:#fffdf9;
+  --line:#d6c9df;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:Arial,Helvetica,sans-serif;color:var(--ink)}
+body{
+  display:flex;
+  justify-content:center;
+  padding:16px 12px 36px;
+  background:
+    radial-gradient(circle at 18px 18px, rgba(121,89,154,.08) 2px, transparent 2.5px) 0 0/36px 36px,
+    linear-gradient(180deg,#fff7fb,#f7f3ff);
+}
+.app{width:min(100%,430px)}
+.shell{
+  background:var(--paper);
+  border:3px solid var(--ink);
+  border-radius:28px;
+  overflow:hidden;
+  box-shadow:8px 10px 0 rgba(63,49,82,.12);
+}
+.status{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:9px 14px;background:var(--pink);border-bottom:2px solid var(--ink);
+  font-size:12px;font-weight:900;letter-spacing:.5px
+}
+.header{text-align:center;padding:18px 18px 14px;background:var(--cream)}
+.kicker{font-size:10px;letter-spacing:1.8px;text-transform:uppercase;font-weight:900;color:var(--purple)}
+h1{font:700 34px/1 Georgia,serif;margin:5px 0 5px}
+.subtitle{margin:0;font-size:13px;color:#706578}
+main{padding:16px}
+.screen{display:none}
+.screen.active{display:block}
+.hero{
+  background:var(--pink2);border:2px dashed var(--line);border-radius:18px;
+  padding:22px 16px;text-align:center;margin-bottom:14px
+}
+.hero .emoji{font-size:38px;margin-bottom:7px}
+.hero h2{font:700 24px/1.1 Georgia,serif;margin:0 0 7px}
+.hero p{margin:0;line-height:1.45;font-size:14px}
+.grid{display:grid;gap:10px}
+button{
+  width:100%;appearance:none;border:3px solid var(--ink);border-radius:16px;
+  padding:14px 13px;font-size:14px;font-weight:900;color:var(--ink);cursor:pointer;
+  box-shadow:4px 4px 0 var(--ink);transition:.08s ease;background:#fff
+}
+button:active{transform:translate(4px,4px);box-shadow:none}
+.btn-pink{background:var(--pink)}
+.btn-blue{background:var(--blue)}
+.btn-green{background:var(--green)}
+.btn-yellow{background:var(--yellow)}
+.btn-cream{background:var(--cream)}
+.btn-purple{background:#eadff4}
+.small{font-size:12px;padding:11px}
+.card{
+  border:2px solid var(--ink);border-radius:18px;padding:14px;background:#fff;
+  margin:10px 0;box-shadow:3px 3px 0 var(--pink)
+}
+.card.blue{box-shadow:3px 3px 0 var(--blue)}
+.card.green{box-shadow:3px 3px 0 var(--green)}
+.card.yellow{box-shadow:3px 3px 0 var(--yellow)}
+.card.purple{box-shadow:3px 3px 0 #eadff4}
+.label{font-size:10px;letter-spacing:1.4px;text-transform:uppercase;font-weight:900;color:var(--purple);margin-bottom:5px;display:block}
+.card h3{font:700 22px/1.1 Georgia,serif;margin:0 0 7px}
+.card p{margin:4px 0;line-height:1.45;font-size:14px}
+.choice-grid{display:grid;gap:9px;margin-top:10px}
+.item{
+  border:2px solid var(--ink);border-radius:15px;padding:12px;background:#fff;
+  text-align:left;font-weight:800;line-height:1.35;cursor:pointer;box-shadow:3px 3px 0 var(--ink)
+}
+.item:active{transform:translate(3px,3px);box-shadow:none}
+.receipt{
+  background:#fff;border:2px dashed var(--ink);padding:14px;border-radius:12px;
+  font-family:"Courier New",monospace;margin:12px 0;line-height:1.5
+}
+.mail{
+  background:#fff;border:2px solid var(--ink);border-radius:14px;padding:14px;margin:10px 0;
+  box-shadow:3px 3px 0 var(--blue)
+}
+.mail .subject{font-weight:900;margin:5px 0 10px}
+.response{
+  margin-top:12px;padding:12px;border-radius:12px;background:var(--green);border:2px solid var(--ink);
+  font-weight:700;line-height:1.4
+}
+.navrow{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}
+.footer{text-align:center;font-size:11px;color:#756b7e;padding:14px 8px 4px}
+.footer .dots{letter-spacing:7px;color:var(--purple);margin-bottom:7px}
+.hidden{display:none!important}
 
-  *{box-sizing:border-box}
+.souvenir{
+  background:#fffdf8;
+  border:2px dashed var(--ink);
+  border-radius:12px;
+  padding:14px;
+  margin:12px 0;
+  font-family:"Courier New",monospace;
+  line-height:1.45;
+}
+.souvenir-title{
+  text-align:center;
+  font-weight:900;
+  letter-spacing:1px;
+  margin-bottom:8px;
+}
+.souvenir-note{
+  text-align:center;
+  margin-top:10px;
+  font-style:italic;
+}
+.artifact-actions{display:grid;gap:8px;margin-top:10px}
 
-  html,body{
-    margin:0;
-    min-height:100%;
-    background:
-      radial-gradient(circle at 18px 18px, rgba(118,85,143,.08) 2px, transparent 2.5px) 0 0/36px 36px,
-      linear-gradient(180deg,#fff7fb,#f8f4ff);
-    color:var(--ink);
-    font-family: Arial, Helvetica, sans-serif;
-  }
-
-  body{
-    display:flex;
-    justify-content:center;
-    padding:18px 12px 36px;
-  }
-
-  .app{
-    width:min(100%,430px);
-  }
-
-  .phone-card{
-    background:var(--paper);
-    border:3px solid var(--ink);
-    border-radius:28px;
-    overflow:hidden;
-    box-shadow:8px 10px 0 rgba(118,85,143,.15);
-  }
-
-  .status{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:10px 16px 8px;
-    font-size:12px;
-    font-weight:700;
-    background:var(--pink);
-    border-bottom:2px solid var(--ink);
-  }
-
-  .brand{
-    text-align:center;
-    padding:22px 20px 16px;
-    background:
-      linear-gradient(135deg,rgba(255,255,255,.5),rgba(255,255,255,0)),
-      var(--cream);
-  }
-
-  .brand .tiny{
-    font-size:11px;
-    letter-spacing:2px;
-    text-transform:uppercase;
-    font-weight:800;
-    color:var(--purple);
-  }
-
-  h1{
-    margin:6px 0 4px;
-    font-family: Georgia, "Times New Roman", serif;
-    font-size:36px;
-    line-height:1;
-    letter-spacing:-1px;
-  }
-
-  .tagline{
-    margin:0;
-    font-size:14px;
-    color:#6d6176;
-  }
-
-  .content{
-    padding:18px;
-  }
-
-  .empty{
-    padding:26px 18px;
-    text-align:center;
-    border:2px dashed var(--line);
-    border-radius:18px;
-    background:var(--pink-soft);
-    margin-bottom:16px;
-  }
-
-  .empty .big{
-    font-size:36px;
-    margin-bottom:8px;
-  }
-
-  .empty p{
-    margin:4px 0;
-    line-height:1.45;
-  }
-
-  .result{
-    display:none;
-    margin-bottom:16px;
-  }
-
-  .stamp{
-    display:inline-block;
-    padding:7px 10px;
-    border:2px solid var(--ink);
-    border-radius:999px;
-    background:var(--blue);
-    font-size:12px;
-    font-weight:800;
-    margin-bottom:12px;
-  }
-
-  .character{
-    font-family:Georgia, "Times New Roman", serif;
-    font-size:29px;
-    margin:0 0 2px;
-  }
-
-  .location{
-    font-size:15px;
-    font-weight:800;
-    color:var(--purple-dark);
-    margin-bottom:16px;
-  }
-
-  .prompt-card{
-    border:2px solid var(--ink);
-    border-radius:18px;
-    padding:15px;
-    background:#fff;
-    margin:10px 0;
-    box-shadow:3px 3px 0 var(--pink);
-  }
-
-  .prompt-card.alt{
-    box-shadow:3px 3px 0 var(--green);
-  }
-
-  .label{
-    display:block;
-    font-size:10px;
-    letter-spacing:1.4px;
-    text-transform:uppercase;
-    font-weight:900;
-    color:var(--purple);
-    margin-bottom:5px;
-  }
-
-  .prompt-card p{
-    margin:0;
-    line-height:1.45;
-    font-size:15px;
-  }
-
-  .next-result{
-    display:none;
-    border:2px solid var(--ink);
-    border-radius:18px;
-    background:var(--cream);
-    padding:16px;
-    margin:14px 0 0;
-  }
-
-  .next-result .arrow{
-    font-size:22px;
-    margin-right:4px;
-  }
-
-  .next-result p{
-    margin:5px 0 0;
-    font-size:16px;
-    line-height:1.45;
-    font-weight:700;
-  }
-
-  .buttons{
-    display:grid;
-    gap:10px;
-  }
-
-  button{
-    appearance:none;
+@media print{
+  body{background:#fff;padding:0}
+  .shell,.footer{display:none!important}
+  #printArea{
+    display:block!important;
     width:100%;
-    border:3px solid var(--ink);
-    border-radius:16px;
-    padding:15px 14px;
-    font-size:14px;
-    font-weight:900;
-    letter-spacing:.4px;
-    color:var(--ink);
-    cursor:pointer;
-    box-shadow:4px 4px 0 var(--ink);
-    transition:transform .08s ease, box-shadow .08s ease;
+    padding:0.5in;
   }
-
-  button:active{
-    transform:translate(4px,4px);
-    box-shadow:0 0 0 var(--ink);
+  #printArea .souvenir{
+    width:3.4in;
+    margin:0 auto;
+    box-shadow:none;
+    break-inside:avoid;
   }
-
-  #startBtn{
-    background:var(--pink);
-  }
-
-  #nextBtn{
-    background:var(--green);
-    display:none;
-  }
-
-  #rerollBtn{
-    background:var(--blue);
-    display:none;
-  }
-
-  .footer{
-    text-align:center;
-    font-size:11px;
-    color:#756b7e;
-    padding:15px 8px 4px;
-  }
-
-  .mini-dots{
-    text-align:center;
-    letter-spacing:7px;
-    color:var(--purple);
-    margin:0 0 8px;
-  }
-
-  @media (max-width:360px){
-    h1{font-size:31px}
-    .content{padding:15px}
-  }
+}
+#printArea{display:none}
 </style>
 </head>
-
 <body>
 <div class="app">
-  <div class="phone-card">
-    <div class="status">
-      <span>BROOKSIDE</span>
-      <span id="clock">11:11</span>
-    </div>
-
-    <header class="brand">
-      <div class="tiny">tiny town adventure generator</div>
+  <div class="shell">
+    <div class="status"><span>BROOKSIDE POCKET V2</span><span id="clock">11:11</span></div>
+    <header class="header">
+      <div class="kicker">a tiny town in your pocket</div>
       <h1>Brookside</h1>
-      <p class="tagline">What are we doing today?</p>
+      <p class="subtitle">Play something small. Keep a little souvenir.</p>
     </header>
 
-    <main class="content">
-
-      <div class="empty" id="emptyState">
-        <div class="big">☁️✨</div>
-        <p><strong>No plans yet.</strong></p>
-        <p>Roll a little Brookside adventure and see where the day takes you.</p>
-      </div>
-
-      <section class="result" id="result">
-        <div class="stamp" id="timeWeather"></div>
-
-        <h2 class="character" id="character"></h2>
-        <div class="location" id="location"></div>
-
-        <div class="prompt-card">
-          <span class="label">Why are you here?</span>
-          <p id="reason"></p>
+    <main>
+      <section id="home" class="screen active">
+        <div class="hero">
+          <div class="emoji">☁️✨</div>
+          <h2>What should we do?</h2>
+          <p>Pick a tiny adventure, or let Brookside choose for you.</p>
         </div>
 
-        <div class="prompt-card alt">
-          <span class="label">Do this</span>
-          <p id="activity"></p>
-        </div>
-
-        <div class="prompt-card">
-          <span class="label">Little detail</span>
-          <p id="detail"></p>
-        </div>
-
-        <div class="next-result" id="nextResult">
-          <span class="label"><span class="arrow">→</span> What happens next?</span>
-          <p id="nextText"></p>
+        <div class="grid">
+          <button class="btn-pink" onclick="surpriseMe()">✨ SURPRISE ME</button>
+          <button class="btn-green" onclick="openThrift()">🛍️ THRIFT STORE RUN</button>
+          <button class="btn-blue" onclick="openCoffee()">☕ PAWS COFFEE</button>
+          <button class="btn-yellow" onclick="openMail()">💌 YOU'VE GOT MAIL</button>
+          <button class="btn-purple" onclick="openLibrary()">📚 BROOKSIDE LIBRARY</button>
         </div>
       </section>
 
-      <div class="buttons">
-        <button id="startBtn">🎲 START AN ADVENTURE</button>
-        <button id="nextBtn">➡️ WHAT HAPPENS NEXT?</button>
-        <button id="rerollBtn">↻ START OVER</button>
-      </div>
+      <section id="thrift" class="screen">
+        <div class="card green">
+          <span class="label">Today in Brookside...</span>
+          <h3>🛍️ Thrift Store Run</h3>
+          <p><strong id="thriftCharacter"></strong> has a little time to kill and wanders into the thrift store.</p>
+          <p>Three things catch her eye. She can only buy one.</p>
+        </div>
+
+        <button id="thriftRevealBtn" class="btn-green" onclick="revealThrift()">🎲 SEE WHAT SHE FINDS</button>
+        <div id="thriftChoices" class="choice-grid"></div>
+        <div id="thriftBonus" class="hidden"></div>
+        <div id="thriftReceipt" class="hidden"></div>
+
+        <div class="navrow">
+          <button class="btn-cream small" onclick="goHome()">⌂ HOME</button>
+          <button class="btn-pink small" onclick="openThrift()">↻ NEW RUN</button>
+        </div>
+      </section>
+
+      <section id="coffee" class="screen">
+        <div class="card blue">
+          <span class="label">Paws Coffee</span>
+          <h3>☕ Coffee Run</h3>
+          <p><strong id="coffeeCustomer"></strong> walks up to the counter. Tailia is working today.</p>
+          <p id="coffeeMoodLine">First, find out what kind of day she’s having.</p>
+        </div>
+
+        <div id="moodButtons" class="choice-grid">
+          <button class="item" onclick="chooseMood('😴 exhausting')">😴 Exhausting</button>
+          <button class="item" onclick="chooseMood('☀️ pretty good')">☀️ Pretty good</button>
+          <button class="item" onclick="chooseMood('😵 weird')">😵 Weird</button>
+          <button class="item" onclick="chooseMood('🎲 unpredictable')">🎲 Surprise me</button>
+        </div>
+
+        <div id="coffeeBuild" class="hidden"></div>
+
+        <div class="navrow">
+          <button class="btn-cream small" onclick="goHome()">⌂ HOME</button>
+          <button class="btn-blue small" onclick="openCoffee()">↻ NEW CUSTOMER</button>
+        </div>
+      </section>
+
+      <section id="mail" class="screen">
+        <div class="card yellow">
+          <span class="label">Inbox</span>
+          <h3>💌 You've Got Mail!</h3>
+          <p>You have one new message from somewhere in Brookside.</p>
+        </div>
+
+        <div id="mailBox" class="mail"></div>
+        <div id="replyChoices" class="choice-grid"></div>
+        <div id="mailResponse" class="hidden"></div>
+
+        <div class="navrow">
+          <button class="btn-cream small" onclick="goHome()">⌂ HOME</button>
+          <button class="btn-yellow small" onclick="openMail()">✉ NEW MESSAGE</button>
+        </div>
+      </section>
+
+      <section id="library" class="screen">
+        <div class="card purple">
+          <span class="label">Brookside Library</span>
+          <h3>📚 Library Visit</h3>
+          <p><strong id="libraryVisitor"></strong> is visiting today.</p>
+          <p><strong id="libraryStaff"></strong> is working the desk.</p>
+          <p>What sounds fun?</p>
+        </div>
+
+        <div id="libraryMenu" class="choice-grid">
+          <button class="item" onclick="libraryBrowse()">📖 Browse the shelves</button>
+          <button class="item" onclick="libraryMaker()">🎨 Maker Space</button>
+          <button class="item" onclick="libraryBoard()">📌 Community board</button>
+          <button class="item" onclick="librarySurprise()">🎲 Surprise me</button>
+        </div>
+
+        <div id="libraryPlay"></div>
+
+        <div class="navrow">
+          <button class="btn-cream small" onclick="goHome()">⌂ HOME</button>
+          <button class="btn-purple small" onclick="openLibrary()">↻ NEW VISIT</button>
+        </div>
+      </section>
     </main>
   </div>
 
   <div class="footer">
-    <div class="mini-dots">★ • ♡ • ★</div>
-    a tiny day in Brookside
+    <div class="dots">★ • ♡ • ★</div>
+    tiny adventures count
   </div>
 </div>
 
+<div id="printArea"></div>
+
 <script>
-const characters = [
-  "Lucy Bennet",
-  "Clarissa",
-  "Tailia",
-  "Lea Grace",
-  "Delilah",
-  "Nevaeh",
-  "Winnie Brooks",
-  "Clara June",
-  "Bonnie Bea",
-  "Piper McKay",
-  "Hart Chapman",
-  "Brittney Paige"
+const characters = ["Clarissa","Lucy","Lea Grace","Delilah","Nevaeh","Winnie","Clara June","Bonnie Bea","Piper"];
+const thriftItems = [
+  ["🐸 Ceramic frog planter", "$3.99"],
+  ["📼 Old rom-com VHS tape", "$1.49"],
+  ["🍓 Strawberry trinket dish", "$2.99"],
+  ["🧸 Slightly wonky plush bear", "$2.49"],
+  ["🪞 Tiny gold vanity mirror", "$4.99"],
+  ["🌼 Daisy-print mug", "$1.99"],
+  ["🕯️ Pastel taper candle pair", "$2.99"],
+  ["📓 Floral pocket notebook", "$1.29"],
+  ["🦋 Butterfly hair clip set", "$2.49"],
+  ["🐈 Cat-shaped picture frame", "$3.49"],
+  ["🎀 Pink glass candy dish", "$4.49"],
+  ["🧩 90s mini puzzle tin", "$1.99"],
+  ["📚 Weird little local-history book", "$2.79"],
+  ["👜 Tiny beaded coin purse", "$3.25"],
+  ["🌙 Moon-and-stars keychain", "$1.50"]
+];
+const bonusItems = [
+  ["🔑 Mystery bag of vintage keychains", "$2.00"],
+  ["💿 Random burned mix CD", "$0.99"],
+  ["🎟️ Envelope of old ticket stubs", "$1.25"],
+  ["🧷 Bag of enamel pins", "$2.50"],
+  ["📮 Tiny ceramic mailbox", "$1.75"],
+  ["🧁 Cupcake-shaped trinket box", "$2.25"]
 ];
 
-const locations = [
-  "📚 Brookside Library",
-  "☕ Paws Coffee",
-  "📖 Rabbit & Ink Bookshop",
-  "🛍️ The Thrift Store",
-  "🌿 Nature Center",
-  "🪞 Nevaeh's Antique Shop",
-  "🎨 Community Arts & Recreation Center",
-  "🖼️ Delilah's Art Gallery",
-  "🐾 Animal Rescue",
-  "🏛️ Children's Museum",
-  "🦴 Natural History Museum"
+const coffeeCustomers = ["Lucy","Clarissa","Lea Grace","Delilah","Nevaeh","Winnie","Clara June","Piper"];
+const bases = ["iced coffee","cold brew","iced latte","hot latte","chai","iced matcha"];
+const syrups = ["vanilla","brown sugar","caramel","raspberry","toasted marshmallow","hazelnut","lavender","cinnamon"];
+const milks = ["whole milk","oat milk","almond milk","cream","vanilla sweet cream"];
+const extras = ["cold foam","extra drizzle","cinnamon dust","whipped cream","no extra","sprinkles"];
+const reactions = [
+  "She takes one sip and immediately says, “Yep. That’s the one.”",
+  "She pauses, thinks about it, and decides it is unexpectedly perfect.",
+  "She announces that this is absolutely becoming her new regular order.",
+  "She likes it, but says she’d probably tweak one thing next time.",
+  "She grins and says Tailia understood the assignment."
 ];
 
-const reasons = [
-  "You had a little time to kill before heading home.",
-  "A friend texted and asked if you wanted to meet up.",
-  "You needed to return something and decided not to rush.",
-  "You heard there might be something interesting happening today.",
-  "You wanted to get out of the house for a bit.",
-  "You were already nearby and decided to stop in.",
-  "You promised yourself one small fun thing after work.",
-  "You came in looking for one specific thing.",
-  "You had no real plan and wandered in anyway.",
-  "Someone mentioned this place earlier and it stuck in your head."
+const mails = [
+  {
+    from:"Lea",
+    subject:"important!!!",
+    body:"the library has those little frosted sugar cookies today and I saved you one.",
+    replies:["omw","YOU'RE THE BEST","save me two actually"],
+    responses:["correct answer. front desk. 10 min.","I know 😌","already handled."]
+  },
+  {
+    from:"Clarissa",
+    subject:"quick question",
+    body:"hypothetically if the thrift store has a raccoon mug do I need it?",
+    replies:["obviously","send a pic first","you have enough mugs"],
+    responses:["THANK YOU.","sending now because this is serious.","that was not one of the acceptable answers."]
+  },
+  {
+    from:"Tailia",
+    subject:"your order?",
+    body:"making myself something ridiculous before close. want me to invent one for you too?",
+    replies:["yes surprise me","something cozy","dealer's choice"],
+    responses:["excellent. no notes.","cozy mode activated.","dangerous thing to say to me."]
+  },
+  {
+    from:"Winnie",
+    subject:"free books",
+    body:"someone donated a box and there are three extremely weird titles in here. you would love them.",
+    replies:["put them aside","define weird","I'm coming over"],
+    responses:["done.","like 'regional ghost legends' weird.","I knew that would work."]
+  },
+  {
+    from:"Nevaeh",
+    subject:"look what I found",
+    body:"there is a tiny avocado-green lamp at the shop that feels spiritually important.",
+    replies:["claim it","photo immediately","do not let anyone buy it"],
+    responses:["I knew you'd understand.","sending.","it is now behind the counter."]
+  }
 ];
 
-const activities = [
-  "Look around until one thing catches your attention. Decide what it is.",
-  "Pick out something small to bring home or remember.",
-  "Check the community board and choose one thing you'd actually attend.",
-  "Make up one tiny interaction with someone who works here.",
-  "Find something that reminds you of another Brookside character.",
-  "Choose one object, book, snack, craft, or trinket that becomes part of today's story.",
-  "Stay awhile instead of rushing to the next thing.",
-  "Take a pretend photo for today's Brookside photo dump.",
-  "Roll or choose something from this location's physical notebook.",
-  "Decide what your character is carrying when they leave."
+const librarySections = ["💕 Romance","🌿 Nature","👻 Weird & Wonderful","🏠 Local History","🎨 Art & Craft","🛸 Strange & Unexplained"];
+const libraryBooks = [
+  "The Ghosts of Great Lakes Motels",
+  "Everyday Superstitions & Where They Came From",
+  "Strange Lights Over Michigan",
+  "A Field Guide to Tiny Urban Wildlife",
+  "The Complete History of Roadside Diners",
+  "Making Things With Paper, String & Patience",
+  "Small Town Signs & Storefronts",
+  "The Secret Life of Library Cards",
+  "Wildflowers of the Midwest",
+  "An Illustrated Guide to Lucky Objects",
+  "The Cozy Mystery Reader's Companion",
+  "Community Art Projects That Actually Work",
+  "A Very Local History of Brookside",
+  "Unexplained Sounds After Midnight",
+  "The Thrifter's Guide to Odd Little Treasures"
+];
+const makerProjects = [
+  "a purple glitter bookmark",
+  "a tiny collage card",
+  "a friendship bracelet",
+  "a mini zine",
+  "a decorated library card sleeve",
+  "a washi-tape bookmark",
+  "a button badge",
+  "a little paper pennant"
+];
+const makerDetails = [
+  "star stickers + purple tassel",
+  "tiny flowers + gel pen doodles",
+  "silver stars + checkerboard tape",
+  "pink hearts + one weird little frog sticker",
+  "lime green accents + handwritten title",
+  "blue glitter + a tiny moon charm"
+];
+const boardFlyers = [
+  "Saturday Used Book Sale",
+  "Make Your Own Mini Zine Night",
+  "Brookside Pet Adoption Afternoon",
+  "Community Swap Table",
+  "Local Ghost Stories Night",
+  "Beginner Embroidery Circle",
+  "Backyard Bird Walk",
+  "First Friday Gallery Night"
 ];
 
-const details = [
-  "It's lightly raining outside.",
-  "The afternoon sun is making everything feel extra cozy.",
-  "Someone has put up a new handmade flyer nearby.",
-  "You can hear music playing quietly in the background.",
-  "You keep running into the color pink today.",
-  "You notice someone left a stack of free stickers.",
-  "There's an oddly specific seasonal drink or snack available.",
-  "The town feels unusually busy today.",
-  "You spot someone you know across the room.",
-  "You find a tiny handwritten note tucked somewhere unexpected.",
-  "It's the kind of day where nobody seems in a hurry.",
-  "You suddenly remember something you meant to do earlier."
-];
+let currentArtifactHTML = "";
 
-const times = [
-  "9:18 AM",
-  "10:42 AM",
-  "11:27 AM",
-  "12:16 PM",
-  "1:38 PM",
-  "2:54 PM",
-  "3:42 PM",
-  "4:17 PM",
-  "5:26 PM",
-  "6:11 PM"
-];
+function pick(arr){ return arr[Math.floor(Math.random()*arr.length)] }
+function shuffle(arr){ return [...arr].sort(()=>Math.random()-.5) }
+function show(id){
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function goHome(){ show("home"); }
+function surpriseMe(){ pick([openThrift,openCoffee,openMail,openLibrary])(); }
 
-const weather = [
-  "sunny",
-  "cloudy",
-  "light rain",
-  "breezy",
-  "warm & hazy",
-  "cool & overcast",
-  "perfect windows-open weather"
-];
-
-const nextEvents = [
-  "Someone texts: “Coffee?” Head to Paws Coffee or decide who sent the message.",
-  "You remember you wanted to check the thrift store before heading home.",
-  "You run into someone you know. Pick another Brookside character to join you.",
-  "A flyer catches your eye. There's a small community event happening nearby.",
-  "You're getting hungry. Decide whether to grab a snack, coffee, or head home.",
-  "You realize you're not quite ready to go home yet. Roll another location.",
-  "Someone recommends a book, object, place, or activity you wouldn't have picked yourself.",
-  "You find something that belongs to another character. Decide whether to return it now.",
-  "Your phone buzzes with a low-stakes favor from a friend.",
-  "You hear that something new was just put out at Rabbit & Ink.",
-  "You decide to make one quick stop at the library before going home.",
-  "The weather shifts. Your original plan suddenly sounds less appealing.",
-  "You notice a poster for something happening at the Community Arts & Recreation Center.",
-  "You decide this deserves a little treat. Pick where you go next.",
-  "Nothing dramatic happens. You simply stay here a little longer and enjoy it."
-];
-
-function pick(array){
-  return array[Math.floor(Math.random() * array.length)];
+function dateStamp(){
+  const d = new Date();
+  return d.toLocaleDateString([], {month:"short", day:"numeric", year:"numeric"}).toUpperCase();
+}
+function timeStamp(){
+  const d = new Date();
+  return d.toLocaleTimeString([], {hour:"numeric", minute:"2-digit"});
+}
+function setArtifact(html){
+  currentArtifactHTML = html;
+}
+function printArtifact(){
+  if(!currentArtifactHTML) return;
+  const area = document.getElementById("printArea");
+  area.innerHTML = currentArtifactHTML;
+  window.print();
+}
+function artifactButtons(){
+  return `
+    <div class="artifact-actions">
+      <button class="btn-pink" onclick="printArtifact()">🖨️ PRINT SOUVENIR</button>
+    </div>`;
 }
 
-function rollAdventure(){
-  document.getElementById("emptyState").style.display = "none";
-  document.getElementById("result").style.display = "block";
-  document.getElementById("nextBtn").style.display = "block";
-  document.getElementById("rerollBtn").style.display = "block";
-  document.getElementById("startBtn").style.display = "none";
-  document.getElementById("nextResult").style.display = "none";
-
-  document.getElementById("character").textContent = pick(characters);
-  document.getElementById("location").textContent = pick(locations);
-  document.getElementById("reason").textContent = pick(reasons);
-  document.getElementById("activity").textContent = pick(activities);
-  document.getElementById("detail").textContent = pick(details);
-  document.getElementById("timeWeather").textContent =
-    pick(times) + " • " + pick(weather);
+function openThrift(){
+  show("thrift");
+  document.getElementById("thriftCharacter").textContent = pick(characters);
+  document.getElementById("thriftRevealBtn").classList.remove("hidden");
+  document.getElementById("thriftChoices").innerHTML="";
+  document.getElementById("thriftBonus").className="hidden";
+  document.getElementById("thriftBonus").innerHTML="";
+  document.getElementById("thriftReceipt").className="hidden";
+  document.getElementById("thriftReceipt").innerHTML="";
 }
-
-function rollNext(){
-  document.getElementById("nextText").textContent = pick(nextEvents);
-  document.getElementById("nextResult").style.display = "block";
-  document.getElementById("nextResult").scrollIntoView({
-    behavior:"smooth",
-    block:"nearest"
+function revealThrift(){
+  document.getElementById("thriftRevealBtn").classList.add("hidden");
+  const finds = shuffle(thriftItems).slice(0,3);
+  const wrap = document.getElementById("thriftChoices");
+  wrap.innerHTML = "";
+  finds.forEach(([name,price])=>{
+    const b=document.createElement("button");
+    b.className="item";
+    b.innerHTML=`${name}<br><span style="font-weight:700">${price}</span>`;
+    b.onclick=()=>chooseThrift(name,price);
+    wrap.appendChild(b);
   });
 }
+function chooseThrift(name,price){
+  document.getElementById("thriftChoices").innerHTML="";
+  const bonus = pick(bonusItems);
+  const box=document.getElementById("thriftBonus");
+  box.className="card yellow";
+  box.innerHTML=`
+    <span class="label">One more thing...</span>
+    <h3>👀 Endcap temptation</h3>
+    <p>On the way to checkout, she spots <strong>${bonus[0]}</strong> for <strong>${bonus[1]}</strong>.</p>
+    <div class="choice-grid">
+      <button class="item" onclick='finishThrift(${JSON.stringify(name)},${JSON.stringify(price)},${JSON.stringify(bonus[0])},${JSON.stringify(bonus[1])},true)'>BUY IT</button>
+      <button class="item" onclick='finishThrift(${JSON.stringify(name)},${JSON.stringify(price)},${JSON.stringify(bonus[0])},${JSON.stringify(bonus[1])},false)'>BE RESPONSIBLE</button>
+    </div>`;
+}
+function moneyToNum(s){return parseFloat(s.replace("$",""))}
+function finishThrift(name,price,bname,bprice,buyBonus){
+  document.getElementById("thriftBonus").classList.add("hidden");
+  const total = moneyToNum(price) + (buyBonus?moneyToNum(bprice):0);
+  const who = document.getElementById("thriftCharacter").textContent;
+  const souvenir = `
+    <div class="souvenir">
+      <div class="souvenir-title">BROOKSIDE THRIFT</div>
+      ${dateStamp()} • ${timeStamp()}<br>
+      CUSTOMER: ${who.toUpperCase()}<br>
+      ------------------------<br>
+      ${name} ..... ${price}<br>
+      ${buyBonus ? `${bname} ..... ${bprice}<br>` : ""}
+      ------------------------<br>
+      TOTAL ..... $${total.toFixed(2)}
+      <div class="souvenir-note">excellent little haul ♡</div>
+    </div>`;
+  setArtifact(souvenir);
+  const rec=document.getElementById("thriftReceipt");
+  rec.className="";
+  rec.innerHTML=souvenir + artifactButtons() + `<button class="btn-pink" style="margin-top:8px" onclick="openThrift()">🛍️ GO THRIFTING AGAIN</button>`;
+}
 
-function resetAdventure(){
-  document.getElementById("emptyState").style.display = "block";
-  document.getElementById("result").style.display = "none";
-  document.getElementById("nextBtn").style.display = "none";
-  document.getElementById("rerollBtn").style.display = "none";
-  document.getElementById("startBtn").style.display = "block";
+function openCoffee(){
+  show("coffee");
+  document.getElementById("coffeeCustomer").textContent = pick(coffeeCustomers);
+  document.getElementById("coffeeMoodLine").textContent="First, find out what kind of day she’s having.";
+  document.getElementById("moodButtons").classList.remove("hidden");
+  document.getElementById("coffeeBuild").className="hidden";
+  document.getElementById("coffeeBuild").innerHTML="";
+}
+function chooseMood(mood){
+  if(mood.includes("unpredictable")) mood=pick(["😴 exhausting","☀️ pretty good","😵 weird"]);
+  document.getElementById("moodButtons").classList.add("hidden");
+  const drink=`${pick(bases)} + ${pick(syrups)} + ${pick(milks)} + ${pick(extras)}`;
+  const customer=document.getElementById("coffeeCustomer").textContent;
+  const box=document.getElementById("coffeeBuild");
+  box.className="";
+  box.innerHTML=`
+    <div class="card blue">
+      <span class="label">${customer}'s mood</span>
+      <p><strong>${mood}</strong></p>
+    </div>
+    <button class="btn-blue" onclick='revealDrink(${JSON.stringify(drink)},${JSON.stringify(customer)})'>☕ TAILIA, MAKE THE DRINK</button>`;
+}
+function revealDrink(drink,customer){
+  const price=(4.25+Math.random()*2).toFixed(2);
+  const reaction = pick(reactions);
+  const souvenir = `
+    <div class="souvenir">
+      <div class="souvenir-title">PAWS COFFEE</div>
+      ${dateStamp()} • ${timeStamp()}<br>
+      ORDER FOR: ${customer.toUpperCase()}<br>
+      ------------------------<br>
+      ${drink}<br>
+      ------------------------<br>
+      TOTAL ..... $${price}
+      <div class="souvenir-note">made by Tailia ☕</div>
+    </div>`;
+  setArtifact(souvenir);
+  const box=document.getElementById("coffeeBuild");
+  box.innerHTML=`
+    <div class="card green">
+      <span class="label">Today's creation</span>
+      <h3>☕ ${customer}'s Drink</h3>
+      <p>${drink}</p>
+      <p><strong>$${price}</strong></p>
+    </div>
+    <div class="card">
+      <span class="label">Reaction</span>
+      <p>${reaction}</p>
+    </div>
+    ${souvenir}
+    ${artifactButtons()}
+    <button class="btn-blue" style="margin-top:8px" onclick="openCoffee()">☕ NEW CUSTOMER</button>`;
+}
+
+let currentMail = null;
+let chosenReply = "";
+function openMail(){
+  show("mail");
+  currentMail=pick(mails);
+  chosenReply="";
+  const box=document.getElementById("mailBox");
+  box.innerHTML=`
+    <div><strong>From:</strong> ${currentMail.from}</div>
+    <div class="subject"><strong>Subject:</strong> ${currentMail.subject}</div>
+    <div>${currentMail.body}</div>`;
+  const replies=document.getElementById("replyChoices");
+  replies.innerHTML="";
+  currentMail.replies.forEach((r,i)=>{
+    const b=document.createElement("button");
+    b.className="item";
+    b.textContent=r;
+    b.onclick=()=>replyMail(r,currentMail.responses[i],currentMail.from);
+    replies.appendChild(b);
+  });
+  document.getElementById("mailResponse").className="hidden";
+  document.getElementById("mailResponse").innerHTML="";
+}
+function replyMail(replyText,responseText,from){
+  chosenReply=replyText;
+  document.getElementById("replyChoices").innerHTML="";
+  const souvenir = `
+    <div class="souvenir">
+      <div class="souvenir-title">YOU'VE GOT MAIL!</div>
+      ${dateStamp()} • ${timeStamp()}<br>
+      FROM: ${currentMail.from.toUpperCase()}<br>
+      SUBJECT: ${currentMail.subject}<br>
+      ------------------------<br>
+      ${currentMail.body}<br><br>
+      REPLY: ${replyText}<br>
+      RESPONSE: ${responseText}
+      <div class="souvenir-note">♡ BROOKSIDE ONLINE</div>
+    </div>`;
+  setArtifact(souvenir);
+  const r=document.getElementById("mailResponse");
+  r.className="";
+  r.innerHTML=`
+    <div class="response"><span class="label">${from} replied</span>${responseText}</div>
+    ${souvenir}
+    ${artifactButtons()}
+    <button class="btn-yellow" style="margin-top:8px" onclick="openMail()">✉ CHECK ANOTHER MESSAGE</button>`;
+}
+
+function openLibrary(){
+  show("library");
+  document.getElementById("libraryVisitor").textContent = pick(characters);
+  document.getElementById("libraryStaff").textContent = pick(["Lea Grace","Winnie"]);
+  document.getElementById("libraryMenu").classList.remove("hidden");
+  document.getElementById("libraryPlay").innerHTML="";
+}
+function librarySurprise(){ pick([libraryBrowse,libraryMaker,libraryBoard])(); }
+
+function libraryBrowse(){
+  document.getElementById("libraryMenu").classList.add("hidden");
+  const section = pick(librarySections);
+  const books = shuffle(libraryBooks).slice(0,3);
+  const area = document.getElementById("libraryPlay");
+  area.innerHTML = `
+    <div class="card purple">
+      <span class="label">Browsing</span>
+      <h3>${section}</h3>
+      <p>Three books catch her eye. Pick one to check out.</p>
+    </div>
+    <div id="bookChoices" class="choice-grid"></div>`;
+  const wrap = document.getElementById("bookChoices");
+  books.forEach(title=>{
+    const b=document.createElement("button");
+    b.className="item";
+    b.textContent="📖 " + title;
+    b.onclick=()=>finishBook(title,section);
+    wrap.appendChild(b);
+  });
+}
+function finishBook(title,section){
+  const visitor = document.getElementById("libraryVisitor").textContent;
+  const souvenir = `
+    <div class="souvenir">
+      <div class="souvenir-title">BROOKSIDE LIBRARY</div>
+      ${dateStamp()} • ${timeStamp()}<br>
+      PATRON: ${visitor.toUpperCase()}<br>
+      SECTION: ${section.replace(/^[^\s]+\s/,"")}<br>
+      ------------------------<br>
+      CHECKED OUT:<br>
+      ${title}<br>
+      ------------------------<br>
+      ITEMS: 1
+      <div class="souvenir-note">thank you for visiting ♡</div>
+    </div>`;
+  setArtifact(souvenir);
+  document.getElementById("libraryPlay").innerHTML=`
+    <div class="card purple">
+      <span class="label">Checked out</span>
+      <h3>📖 ${title}</h3>
+      <p>Excellent choice.</p>
+    </div>
+    ${souvenir}
+    ${artifactButtons()}`;
+}
+
+function libraryMaker(){
+  document.getElementById("libraryMenu").classList.add("hidden");
+  const project=pick(makerProjects);
+  const detail=pick(makerDetails);
+  const visitor=document.getElementById("libraryVisitor").textContent;
+  const souvenir = `
+    <div class="souvenir">
+      <div class="souvenir-title">BROOKSIDE LIBRARY MAKER SPACE</div>
+      ${dateStamp()} • ${timeStamp()}<br>
+      MAKER: ${visitor.toUpperCase()}<br>
+      ------------------------<br>
+      PROJECT:<br>
+      ${project}<br><br>
+      DETAILS:<br>
+      ${detail}
+      <div class="souvenir-note">made at Brookside Library ✂️</div>
+    </div>`;
+  setArtifact(souvenir);
+  document.getElementById("libraryPlay").innerHTML=`
+    <div class="card green">
+      <span class="label">Maker Space</span>
+      <h3>🎨 She made ${project}</h3>
+      <p>Details: ${detail}.</p>
+    </div>
+    ${souvenir}
+    ${artifactButtons()}`;
+}
+
+function libraryBoard(){
+  document.getElementById("libraryMenu").classList.add("hidden");
+  const flyer=pick(boardFlyers);
+  const visitor=document.getElementById("libraryVisitor").textContent;
+  const souvenir = `
+    <div class="souvenir">
+      <div class="souvenir-title">BROOKSIDE COMMUNITY BOARD</div>
+      ${dateStamp()}<br>
+      ------------------------<br>
+      ${flyer.toUpperCase()}<br>
+      ------------------------<br>
+      spotted by ${visitor}<br>
+      at Brookside Library
+      <div class="souvenir-note">maybe you should go ♡</div>
+    </div>`;
+  setArtifact(souvenir);
+  document.getElementById("libraryPlay").innerHTML=`
+    <div class="card yellow">
+      <span class="label">Community Board</span>
+      <h3>📌 ${flyer}</h3>
+      <p>She stops to read the flyer and decides it sounds worth remembering.</p>
+    </div>
+    ${souvenir}
+    ${artifactButtons()}`;
 }
 
 function updateClock(){
-  const now = new Date();
-  document.getElementById("clock").textContent =
-    now.toLocaleTimeString([], {hour:"numeric", minute:"2-digit"});
+  const now=new Date();
+  document.getElementById("clock").textContent=now.toLocaleTimeString([], {hour:"numeric",minute:"2-digit"});
 }
-
-document.getElementById("startBtn").addEventListener("click", rollAdventure);
-document.getElementById("nextBtn").addEventListener("click", rollNext);
-document.getElementById("rerollBtn").addEventListener("click", rollAdventure);
-
-updateClock();
-setInterval(updateClock, 30000);
+updateClock(); setInterval(updateClock,30000);
 </script>
 </body>
 </html>
