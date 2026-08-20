@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="theme-color" content="#f9d7eb" />
-<title>Brookside Pocket V3.1</title>
+<title>Brookside Pocket V4</title>
 <style>
 :root{
   --ink:#3f3152;
@@ -143,6 +143,28 @@ button:active{transform:translate(4px,4px);box-shadow:none}
 .inventory-item .ico{font-size:28px;display:block;margin-bottom:4px}
 .badge{display:inline-block;background:var(--pink);border:2px solid var(--ink);border-radius:999px;padding:4px 8px;font-size:10px;font-weight:900;margin-top:4px}
 
+
+.save-tools{display:grid;gap:9px;margin-top:12px}
+.file-input{display:none}
+.aim-window{border:3px solid var(--ink);border-radius:14px;overflow:hidden;background:#fff;margin:10px 0}
+.aim-bar{background:var(--blue);padding:8px 10px;font-weight:900;border-bottom:2px solid var(--ink);font-size:12px}
+.aim-log{padding:12px;font-family:"Courier New",monospace;font-size:13px;line-height:1.5;min-height:170px}
+.aim-line{margin:5px 0}
+.call-card{text-align:center;border:3px solid var(--ink);border-radius:20px;background:var(--green);padding:20px 14px;margin:12px 0}
+.call-avatar{font-size:50px}
+.call-name{font:700 26px/1.1 Georgia,serif;margin:8px 0}
+.call-sub{font-size:13px}
+.book-cover{border:3px solid var(--ink);border-radius:14px;padding:18px 12px;background:var(--cream);text-align:center;min-height:140px;display:flex;flex-direction:column;justify-content:center}
+.book-title{font:700 20px/1.15 Georgia,serif}
+.book-meta{font-size:11px;margin-top:8px;color:#6f6378}
+.vend-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.vend-btn{padding:14px 8px;font-family:"Courier New",monospace}
+.photo-strip{background:#fff;border:2px solid var(--ink);padding:10px;border-radius:10px;margin:10px 0}
+.photo-frame{border:2px solid var(--ink);border-radius:10px;padding:18px 10px;margin:8px 0;background:#f8f8f8;text-align:center;min-height:92px;display:flex;flex-direction:column;justify-content:center}
+.photo-time{font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--purple);font-weight:900;margin-bottom:5px}
+.internet-grid{display:grid;gap:9px}
+.save-note{font-size:12px;line-height:1.4;color:#6f6378;margin-top:8px}
+
 @media print{
   body{background:#fff;padding:0}
   .shell,.footer{display:none!important}
@@ -164,7 +186,7 @@ button:active{transform:translate(4px,4px);box-shadow:none}
 <body>
 <div class="app">
   <div class="shell">
-    <div class="status"><span>BROOKSIDE POCKET V3.1</span><span id="clock">11:11</span></div>
+    <div class="status"><span>BROOKSIDE POCKET V4</span><span id="clock">11:11</span></div>
     <header class="header">
       <div class="kicker">a tiny town in your pocket</div>
       <h1>Brookside</h1>
@@ -181,13 +203,17 @@ button:active{transform:translate(4px,4px);box-shadow:none}
 
         <div class="grid">
           <button class="btn-pink" onclick="surpriseMe()">✨ SURPRISE ME</button>
+          <button class="btn-blue" onclick="openToday()">☀️ TODAY IN BROOKSIDE</button>
           <button class="btn-green" onclick="openThrift()">🛍️ THRIFT STORE RUN</button>
-          <button class="btn-blue" onclick="openCoffee()">☕ PAWS COFFEE</button>
-          <button class="btn-yellow" onclick="openMail()">💌 YOU'VE GOT MAIL</button>
+          <button class="btn-yellow" onclick="openCoffee()">☕ PAWS COFFEE</button>
           <button class="btn-purple" onclick="openLibrary()">📚 BROOKSIDE LIBRARY</button>
-          <button class="btn-pink" onclick="openToday()">☀️ TODAY IN BROOKSIDE</button>
+          <button class="btn-pink" onclick="openRabbitInk()">📖 RABBIT &amp; INK</button>
           <button class="btn-blue" onclick="openChat()">💬 GROUP CHAT</button>
-          <button class="btn-yellow" onclick="openStuff()">🎒 MY STUFF <span id="stuffCount"></span></button>
+          <button class="btn-green" onclick="openAIM()">💻 BROOKSIDE AIM</button>
+          <button class="btn-yellow" onclick="openCall()">📞 SOMEONE'S CALLING</button>
+          <button class="btn-purple" onclick="openVending()">🥤 VENDING MACHINE</button>
+          <button class="btn-pink" onclick="openPhotoDump()">📸 PHOTO DUMP</button>
+          <button class="btn-blue" onclick="openStuff()">🎒 MY STUFF <span id="stuffCount"></span></button>
         </div>
       </section>
 
@@ -315,9 +341,95 @@ button:active{transform:translate(4px,4px);box-shadow:none}
           <p>Keep playing. Brookside will occasionally give you something.</p>
         </div>
         <div id="inventory" class="inventory-grid"></div>
+
+        <div class="card purple">
+          <span class="label">Collection Safety</span>
+          <h3>💾 Backup Brookside</h3>
+          <p>Export a tiny Brookside save file so your collection can be restored if browser data is ever cleared.</p>
+          <div class="save-tools">
+            <button class="btn-purple small" onclick="exportBrooksideSave()">⬇️ EXPORT SAVE FILE</button>
+            <button class="btn-blue small" onclick="document.getElementById('importSaveFile').click()">⬆️ IMPORT SAVE FILE</button>
+            <input id="importSaveFile" class="file-input" type="file" accept=".json,application/json" onchange="importBrooksideSave(event)">
+          </div>
+          <p class="save-note" id="saveStatus">Your current collection stays on this device unless you export a backup.</p>
+        </div>
+
         <div class="navrow">
           <button class="btn-cream small" onclick="goHome()">⌂ HOME</button>
           <button class="btn-pink small" onclick="surpriseMe()">✨ GO PLAY</button>
+        </div>
+      </section>
+
+
+      <section id="aim" class="screen">
+        <div class="card blue">
+          <span class="label">Brookside Online</span>
+          <h3>💻 Brookside AIM</h3>
+          <p>Someone just signed on.</p>
+        </div>
+        <div class="aim-window">
+          <div class="aim-bar" id="aimBuddy">buddy list</div>
+          <div class="aim-log" id="aimLog"></div>
+        </div>
+        <div id="aimReplies" class="choice-grid"></div>
+        <div class="navrow">
+          <button class="btn-cream small" onclick="goHome()">⌂ HOME</button>
+          <button class="btn-blue small" onclick="openAIM()">↻ NEW CHAT</button>
+        </div>
+      </section>
+
+      <section id="call" class="screen">
+        <div id="callArea"></div>
+        <div class="navrow">
+          <button class="btn-cream small" onclick="goHome()">⌂ HOME</button>
+          <button class="btn-green small" onclick="openCall()">↻ NEW CALL</button>
+        </div>
+      </section>
+
+      <section id="rabbitInk" class="screen">
+        <div class="card purple">
+          <span class="label">Rabbit &amp; Ink Bookshop</span>
+          <h3>📖 Lucy's Recommendations</h3>
+          <p>Pick your mood and Lucy will pull three books from the shelves.</p>
+        </div>
+        <div id="bookMoodButtons" class="choice-grid">
+          <button class="item" onclick="rabbitMood('cozy')">☕ Cozy</button>
+          <button class="item" onclick="rabbitMood('weird')">🛸 Weird</button>
+          <button class="item" onclick="rabbitMood('romantic')">💕 Romantic</button>
+          <button class="item" onclick="rabbitMood('surprise')">🎲 Surprise me</button>
+        </div>
+        <div id="rabbitPlay"></div>
+        <div class="navrow">
+          <button class="btn-cream small" onclick="goHome()">⌂ HOME</button>
+          <button class="btn-purple small" onclick="openRabbitInk()">↻ START OVER</button>
+        </div>
+      </section>
+
+      <section id="vending" class="screen">
+        <div class="card yellow">
+          <span class="label">Community Center Hallway</span>
+          <h3>🥤 Vending Machine</h3>
+          <p>You have $1.25 and absolutely no reason not to press a button.</p>
+        </div>
+        <div class="vend-grid" id="vendGrid"></div>
+        <div id="vendResult"></div>
+        <div class="navrow">
+          <button class="btn-cream small" onclick="goHome()">⌂ HOME</button>
+          <button class="btn-yellow small" onclick="openVending()">↻ RESTOCK</button>
+        </div>
+      </section>
+
+      <section id="photoDump" class="screen">
+        <div class="card pink">
+          <span class="label">Camera Roll</span>
+          <h3>📸 Today's Photo Dump</h3>
+          <p>A few tiny moments from around Brookside.</p>
+        </div>
+        <div id="photoStrip"></div>
+        <button class="btn-pink" onclick="makePhotoDump()">📸 NEW PHOTO DUMP</button>
+        <div class="navrow">
+          <button class="btn-cream small" onclick="goHome()">⌂ HOME</button>
+          <button class="btn-pink small" onclick="printPhotoArtifact()">🖨️ PRINT STRIP</button>
         </div>
       </section>
 
@@ -992,6 +1104,341 @@ function sendChatReply(text,after){
     box.after(holder);
     maybeCollect("chatCollectibleHolder");
   },250);
+}
+
+
+const aimChats = [
+  {
+    buddy:"clarissa87",
+    start:"u busy",
+    replies:["nope","define busy","what's up"],
+    responses:["good. thrift emergency.","busy enough to avoid helping me move a shelf?","I found something and need a second opinion."]
+  },
+  {
+    buddy:"lucybennet",
+    start:"okay weird question",
+    replies:["my favorite kind","go on","I'm scared"],
+    responses:["do you think books can have a vibe before you read them","there's a book here that feels extremely you","fair. but answer anyway."]
+  },
+  {
+    buddy:"tailia.exe",
+    start:"paws is empty and I am experimenting",
+    replies:["dangerous","make me one","how experimental"],
+    responses:["correct.","already did.","two syrups and a questionable amount of foam."]
+  },
+  {
+    buddy:"lea_online",
+    start:"I need a second opinion on a flyer",
+    replies:["send it","what's wrong with it","yes immediately"],
+    responses:["sending pic now","I can't tell if it's cute or looks like a ransom note","this is why you're my favorite."]
+  }
+];
+
+const calls = [
+  {
+    who:"Clarissa",icon:"🐾",
+    line:"Okay don't be mad, but I found something.",
+    choices:["What did you find?","How expensive is it?","I'm already mad."],
+    replies:["A raccoon-shaped cookie jar. It's incredible.","That is not the point right now.","That's fair, but wait until you see it."]
+  },
+  {
+    who:"Lucy",icon:"📚",
+    line:"I'm at Rabbit & Ink and there is a book here that made me think of you.",
+    choices:["What book?","Buy it immediately.","Why did it make you think of me?"],
+    replies:["It's called The Secret Life of Library Cards.","Excellent answer.","Because it's oddly specific and kind of charming."]
+  },
+  {
+    who:"Tailia",icon:"☕",
+    line:"I accidentally made a drink that is way better than it has any right to be.",
+    choices:["Describe it.","Save me one.","I don't trust you."],
+    replies:["Cold brew, raspberry, vanilla sweet cream, tiny bit of cinnamon.","Already labeled your cup.","You shouldn't. But also it's delicious."]
+  },
+  {
+    who:"Nevaeh",icon:"🪞",
+    line:"I need someone to talk me out of buying a lamp.",
+    choices:["Wrong number.","Send a photo.","Buy the lamp."],
+    replies:["I KNEW I CALLED THE WRONG PERSON.","Sending. It's avocado green.","Thank you for enabling me."]
+  }
+];
+
+const rabbitBooks = {
+  cozy:[
+    ["The Teacup at the End of the Street","small-town fiction"],
+    ["Rainy Afternoons & Other Good Ideas","essays"],
+    ["The Secondhand Bookshop Society","cozy fiction"],
+    ["A Very Quiet Saturday","slice-of-life"]
+  ],
+  weird:[
+    ["Unexplained Sounds After Midnight","strange nonfiction"],
+    ["Strange Lights Over Michigan","local mysteries"],
+    ["The Museum of Extremely Specific Objects","oddities"],
+    ["Everyday Superstitions & Where They Came From","folklore"]
+  ],
+  romantic:[
+    ["Meet Me After Closing","romance"],
+    ["The Bookshop Next Door","romance"],
+    ["Postcards From Someone I Haven't Met Yet","romance"],
+    ["First Friday","community romance"]
+  ]
+};
+
+const vendingItems = [
+  ["A1","🍓 Strawberry soda"],
+  ["A2","🍬 Peach ring gummies"],
+  ["A3","🍫 Chocolate wafer bar"],
+  ["B1","💿 Mini mystery mix CD"],
+  ["B2","✨ Holographic sticker pack"],
+  ["B3","🧃 Fruit punch juice box"],
+  ["C1","🐸 Tiny frog keychain"],
+  ["C2","🍪 Frosted sugar cookies"],
+  ["C3","📎 Novelty paper clip set"]
+];
+
+const photoMoments = [
+  "iced coffee in the cupholder",
+  "a crooked flyer on the library bulletin board",
+  "Clarissa holding something she absolutely does not need",
+  "a pink sunset over the Paws Coffee parking lot",
+  "three weird mugs lined up at the thrift store",
+  "Lea's desk covered in Maker Space scraps",
+  "Lucy shelving books at Rabbit & Ink",
+  "a tiny vase of daisies on a café table",
+  "Nevaeh pointing at an alarming lamp",
+  "a stack of library books with a receipt sticking out",
+  "a friendship bracelet half-finished at the Community Center",
+  "a blurry photo of a very friendly orange cat",
+  "a handwritten sign that says FREE STICKERS",
+  "Tailia's drink experiment with too much foam",
+  "a little paper bag from the antique shop"
+];
+
+let photoArtifactHTML = "";
+
+function exportBrooksideSave(){
+  const save = {
+    version:"Brookside Pocket V4",
+    exportedAt:new Date().toISOString(),
+    inventory:getInventory()
+  };
+  const blob = new Blob([JSON.stringify(save,null,2)], {type:"application/json"});
+  const url = URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url;
+  a.download="brookside-pocket-save.json";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),500);
+  const s=document.getElementById("saveStatus");
+  if(s) s.textContent="✓ Backup exported. Keep that little file somewhere safe.";
+}
+
+function importBrooksideSave(event){
+  const file=event.target.files && event.target.files[0];
+  if(!file) return;
+  const reader=new FileReader();
+  reader.onload=function(){
+    try{
+      const data=JSON.parse(reader.result);
+      if(!data || !Array.isArray(data.inventory)) throw new Error("Invalid save");
+      const cleaned=data.inventory.filter(x=>x && x.name && x.icon && x.type);
+      saveInventory(cleaned);
+      openStuff();
+      const s=document.getElementById("saveStatus");
+      if(s) s.textContent=`✓ Restored ${cleaned.length} Brookside collectible${cleaned.length===1?"":"s"}.`;
+    }catch(e){
+      const s=document.getElementById("saveStatus");
+      if(s) s.textContent="That file doesn't look like a Brookside save.";
+    }
+    event.target.value="";
+  };
+  reader.readAsText(file);
+}
+
+function openAIM(){
+  show("aim");
+  const c=pick(aimChats);
+  document.getElementById("aimBuddy").textContent=`💻 ${c.buddy} is online`;
+  const log=document.getElementById("aimLog");
+  log.innerHTML=`<div class="aim-line"><strong>${c.buddy}:</strong> ${c.start}</div>`;
+  const replies=document.getElementById("aimReplies");
+  replies.innerHTML="";
+  c.replies.forEach((r,i)=>{
+    const b=document.createElement("button");
+    b.className="item";
+    b.textContent=r;
+    b.onclick=()=>{
+      log.innerHTML+=`<div class="aim-line"><strong>you:</strong> ${r}</div>`;
+      log.innerHTML+=`<div class="aim-line"><strong>${c.buddy}:</strong> ${c.responses[i]}</div>`;
+      replies.innerHTML="";
+      const again=document.createElement("button");
+      again.className="btn-blue";
+      again.textContent="💻 NEW IM";
+      again.onclick=openAIM;
+      replies.appendChild(again);
+    };
+    replies.appendChild(b);
+  });
+}
+
+function openCall(){
+  show("call");
+  const c=pick(calls);
+  const area=document.getElementById("callArea");
+  area.innerHTML=`
+    <div class="call-card">
+      <div class="call-avatar">${c.icon}</div>
+      <div class="call-name">${c.who}</div>
+      <div class="call-sub">INCOMING CALL...</div>
+    </div>
+    <div class="choice-grid">
+      <button class="item" id="acceptCall">📞 ACCEPT</button>
+      <button class="item" onclick="declineCall(${JSON.stringify(c.who)})">🔕 DECLINE</button>
+    </div>`;
+  document.getElementById("acceptCall").onclick=()=>acceptCall(c);
+}
+function declineCall(who){
+  document.getElementById("callArea").innerHTML=`
+    <div class="card">
+      <span class="label">Missed Call</span>
+      <h3>🔕 ${who}</h3>
+      <p>She'll probably text you.</p>
+    </div>`;
+}
+function acceptCall(c){
+  const area=document.getElementById("callArea");
+  area.innerHTML=`
+    <div class="card green">
+      <span class="label">On the phone with ${c.who}</span>
+      <h3>${c.icon} ${c.who}</h3>
+      <p>${c.line}</p>
+    </div>
+    <div id="callChoices" class="choice-grid"></div>`;
+  const wrap=document.getElementById("callChoices");
+  c.choices.forEach((choice,i)=>{
+    const b=document.createElement("button");
+    b.className="item";
+    b.textContent=choice;
+    b.onclick=()=>{
+      area.innerHTML+=`
+        <div class="response">
+          <span class="label">${c.who}</span>
+          ${c.replies[i]}
+        </div>`;
+      wrap.innerHTML="";
+    };
+    wrap.appendChild(b);
+  });
+}
+
+function openRabbitInk(){
+  show("rabbitInk");
+  document.getElementById("bookMoodButtons").classList.remove("hidden");
+  document.getElementById("rabbitPlay").innerHTML="";
+}
+function rabbitMood(mood){
+  if(mood==="surprise") mood=pick(["cozy","weird","romantic"]);
+  document.getElementById("bookMoodButtons").classList.add("hidden");
+  const books=shuffle(rabbitBooks[mood]).slice(0,3);
+  const area=document.getElementById("rabbitPlay");
+  area.innerHTML=`<div class="grid" id="rabbitChoices"></div>`;
+  const wrap=document.getElementById("rabbitChoices");
+  books.forEach(([title,meta])=>{
+    const b=document.createElement("button");
+    b.className="book-cover";
+    b.innerHTML=`<div class="book-title">${title}</div><div class="book-meta">${meta}</div>`;
+    b.onclick=()=>chooseRabbitBook(title,meta);
+    wrap.appendChild(b);
+  });
+}
+function chooseRabbitBook(title,meta){
+  const souvenir=`
+    <div class="souvenir">
+      <div class="souvenir-title">RABBIT &amp; INK</div>
+      LUCY RECOMMENDS:<br>
+      ------------------------<br>
+      ${title}<br>
+      ${meta}<br>
+      ------------------------
+      <div class="souvenir-note">picked just for you ♡</div>
+    </div>`;
+  setArtifact(souvenir);
+  document.getElementById("rabbitPlay").innerHTML=`
+    <div class="card purple">
+      <span class="label">Lucy's Pick</span>
+      <h3>📖 ${title}</h3>
+      <p>${meta}</p>
+    </div>
+    ${souvenir}
+    ${artifactButtons()}`;
+}
+
+function openVending(){
+  show("vending");
+  const grid=document.getElementById("vendGrid");
+  grid.innerHTML="";
+  document.getElementById("vendResult").innerHTML="";
+  shuffle(vendingItems).slice(0,9).forEach(([code,item])=>{
+    const b=document.createElement("button");
+    b.className="btn-yellow vend-btn";
+    b.textContent=code;
+    b.onclick=()=>vendItem(code,item);
+    grid.appendChild(b);
+  });
+}
+function vendItem(code,item){
+  document.getElementById("vendGrid").innerHTML="";
+  const isCollectible=/sticker|keychain|CD/i.test(item);
+  document.getElementById("vendResult").innerHTML=`
+    <div class="collectible">
+      <span class="label">clunk!</span>
+      <div class="bigicon">${item.split(" ")[0]}</div>
+      <h3>${item.replace(/^[^\s]+\s/,"")}</h3>
+      <p>Slot ${code}. Best $1.25 you've spent today.</p>
+    </div>`;
+  if(isCollectible){
+    const holder=document.createElement("div");
+    holder.id="vendCollect";
+    document.getElementById("vendResult").appendChild(holder);
+    const mapped = item.includes("frog") ? collectibles.find(x=>x.name==="Tiny Thrift Frog")
+      : item.includes("CD") ? collectibles.find(x=>x.name==="Brookside Summer Mix '02")
+      : collectibles.find(x=>x.name==="Brookside Daisy");
+    if(mapped){
+      const inv=getInventory();
+      if(!inv.some(x=>x.name===mapped.name)){
+        const wrap=document.createElement("div");
+        wrap.className="collectible";
+        wrap.innerHTML=`<span class="label">✨ collectible!</span><div class="bigicon">${mapped.icon}</div><h3>${mapped.name}</h3><div class="badge">${mapped.type}</div>`;
+        const btn=document.createElement("button");
+        btn.className="btn-yellow small";
+        btn.textContent="🎒 KEEP IT";
+        btn.onclick=()=>keepCollectible(mapped,btn,wrap);
+        wrap.appendChild(btn);
+        holder.appendChild(wrap);
+      }
+    }
+  }
+}
+
+function openPhotoDump(){
+  show("photoDump");
+  makePhotoDump();
+}
+function makePhotoDump(){
+  const moments=shuffle(photoMoments).slice(0,4);
+  const times=["11:14 AM","1:32 PM","4:08 PM","6:41 PM"];
+  let frames="";
+  moments.forEach((m,i)=>{
+    frames+=`<div class="photo-frame"><div class="photo-time">${times[i]}</div><strong>${m}</strong></div>`;
+  });
+  const strip=`<div class="photo-strip"><div class="souvenir-title">BROOKSIDE PHOTO DUMP</div>${frames}<div class="souvenir-note">${dateStamp()} ♡</div></div>`;
+  photoArtifactHTML=strip;
+  document.getElementById("photoStrip").innerHTML=strip;
+}
+function printPhotoArtifact(){
+  if(!photoArtifactHTML) return;
+  currentArtifactHTML=photoArtifactHTML;
+  printArtifact();
 }
 
 function updateClock(){
