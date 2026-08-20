@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="theme-color" content="#f9d7eb" />
-<title>Brookside Pocket V2</title>
+<title>Brookside Pocket V3</title>
 <style>
 :root{
   --ink:#3f3152;
@@ -126,6 +126,23 @@ button:active{transform:translate(4px,4px);box-shadow:none}
 }
 .artifact-actions{display:grid;gap:8px;margin-top:10px}
 
+
+.today-list{display:grid;gap:9px;margin-top:10px}
+.today-item{border:2px solid var(--ink);border-radius:14px;padding:11px;background:#fff;line-height:1.4}
+.today-item strong{display:block;margin-bottom:2px}
+.chatbox{background:#f7f3ff;border:2px solid var(--ink);border-radius:16px;padding:12px;margin:10px 0}
+.bubble{max-width:88%;padding:9px 11px;border:2px solid var(--ink);border-radius:14px;margin:8px 0;line-height:1.35;font-size:14px}
+.bubble.them{background:#fff}
+.bubble.me{background:var(--green);margin-left:auto}
+.bubble .who{display:block;font-size:10px;text-transform:uppercase;letter-spacing:1px;font-weight:900;color:var(--purple);margin-bottom:3px}
+.collectible{border:3px solid var(--ink);border-radius:18px;background:var(--yellow);padding:16px;text-align:center;margin:12px 0;box-shadow:4px 4px 0 var(--ink)}
+.collectible .bigicon{font-size:42px}
+.collectible h3{font:700 22px/1.1 Georgia,serif;margin:6px 0}
+.inventory-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:10px}
+.inventory-item{border:2px solid var(--ink);border-radius:14px;padding:11px;background:#fff;text-align:center;font-size:12px;line-height:1.35}
+.inventory-item .ico{font-size:28px;display:block;margin-bottom:4px}
+.badge{display:inline-block;background:var(--pink);border:2px solid var(--ink);border-radius:999px;padding:4px 8px;font-size:10px;font-weight:900;margin-top:4px}
+
 @media print{
   body{background:#fff;padding:0}
   .shell,.footer{display:none!important}
@@ -147,11 +164,11 @@ button:active{transform:translate(4px,4px);box-shadow:none}
 <body>
 <div class="app">
   <div class="shell">
-    <div class="status"><span>BROOKSIDE POCKET V2</span><span id="clock">11:11</span></div>
+    <div class="status"><span>BROOKSIDE POCKET V3</span><span id="clock">11:11</span></div>
     <header class="header">
       <div class="kicker">a tiny town in your pocket</div>
       <h1>Brookside</h1>
-      <p class="subtitle">Play something small. Keep a little souvenir.</p>
+      <p class="subtitle">Check in on town. Play something small. Keep a little souvenir.</p>
     </header>
 
     <main>
@@ -168,6 +185,9 @@ button:active{transform:translate(4px,4px);box-shadow:none}
           <button class="btn-blue" onclick="openCoffee()">☕ PAWS COFFEE</button>
           <button class="btn-yellow" onclick="openMail()">💌 YOU'VE GOT MAIL</button>
           <button class="btn-purple" onclick="openLibrary()">📚 BROOKSIDE LIBRARY</button>
+          <button class="btn-pink" onclick="openToday()">☀️ TODAY IN BROOKSIDE</button>
+          <button class="btn-blue" onclick="openChat()">💬 GROUP CHAT</button>
+          <button class="btn-yellow" onclick="openStuff()">🎒 MY STUFF <span id="stuffCount"></span></button>
         </div>
       </section>
 
@@ -253,6 +273,54 @@ button:active{transform:translate(4px,4px);box-shadow:none}
           <button class="btn-purple small" onclick="openLibrary()">↻ NEW VISIT</button>
         </div>
       </section>
+
+      <section id="today" class="screen">
+        <div class="card pink">
+          <span class="label">Town Check-In</span>
+          <h3>☀️ Today in Brookside</h3>
+          <p id="todayDate"></p>
+          <p>Here’s what’s going on around town.</p>
+        </div>
+        <div id="todayList" class="today-list"></div>
+        <div id="todayLittleThing"></div>
+        <div class="navrow">
+          <button class="btn-cream small" onclick="goHome()">⌂ HOME</button>
+          <button class="btn-pink small" onclick="openToday()">↻ NEW DAY</button>
+        </div>
+      </section>
+
+      <section id="chat" class="screen">
+        <div class="card blue">
+          <span class="label">Messages</span>
+          <h3>💬 Brookside Girls</h3>
+          <p>You have unread messages.</p>
+        </div>
+        <div id="chatBox" class="chatbox"></div>
+        <div id="chatReplies" class="choice-grid"></div>
+        <div class="navrow">
+          <button class="btn-cream small" onclick="goHome()">⌂ HOME</button>
+          <button class="btn-blue small" onclick="openChat()">↻ NEW CHAT</button>
+        </div>
+      </section>
+
+      <section id="stuff" class="screen">
+        <div class="card yellow">
+          <span class="label">Brookside Pocket</span>
+          <h3>🎒 My Stuff</h3>
+          <p>Little things you’ve collected while wandering around Brookside.</p>
+        </div>
+        <div id="stuffEmpty" class="hero hidden">
+          <div class="emoji">🎒</div>
+          <h2>Your bag is empty.</h2>
+          <p>Keep playing. Brookside will occasionally give you something.</p>
+        </div>
+        <div id="inventory" class="inventory-grid"></div>
+        <div class="navrow">
+          <button class="btn-cream small" onclick="goHome()">⌂ HOME</button>
+          <button class="btn-pink small" onclick="surpriseMe()">✨ GO PLAY</button>
+        </div>
+      </section>
+
     </main>
   </div>
 
@@ -483,7 +551,7 @@ function finishThrift(name,price,bname,bprice,buyBonus){
   setArtifact(souvenir);
   const rec=document.getElementById("thriftReceipt");
   rec.className="";
-  rec.innerHTML=souvenir + artifactButtons() + `<button class="btn-pink" style="margin-top:8px" onclick="openThrift()">🛍️ GO THRIFTING AGAIN</button>`;
+  rec.innerHTML=souvenir + artifactButtons() + `<button class="btn-pink" style="margin-top:8px" onclick="openThrift()">🛍️ GO THRIFTING AGAIN</button><div id="thriftCollect"></div>`; maybeCollect("thriftCollect");
 }
 
 function openCoffee(){
@@ -537,7 +605,7 @@ function revealDrink(drink,customer){
     </div>
     ${souvenir}
     ${artifactButtons()}
-    <button class="btn-blue" style="margin-top:8px" onclick="openCoffee()">☕ NEW CUSTOMER</button>`;
+    <button class="btn-blue" style="margin-top:8px" onclick="openCoffee()">☕ NEW CUSTOMER</button><div id="coffeeCollect"></div>`; maybeCollect("coffeeCollect");
 }
 
 let currentMail = null;
@@ -585,7 +653,7 @@ function replyMail(replyText,responseText,from){
     <div class="response"><span class="label">${from} replied</span>${responseText}</div>
     ${souvenir}
     ${artifactButtons()}
-    <button class="btn-yellow" style="margin-top:8px" onclick="openMail()">✉ CHECK ANOTHER MESSAGE</button>`;
+    <button class="btn-yellow" style="margin-top:8px" onclick="openMail()">✉ CHECK ANOTHER MESSAGE</button><div id="mailCollect"></div>`; maybeCollect("mailCollect");
 }
 
 function openLibrary(){
@@ -698,11 +766,193 @@ function libraryBoard(){
     ${artifactButtons()}`;
 }
 
+
+const townHappenings = [
+  ["📚 Brookside Library","The used book cart is outside today."],
+  ["☕ Paws Coffee","There’s a mystery off-menu drink at the counter."],
+  ["🛍️ Thrift Store","All mugs are 50¢ today."],
+  ["🎨 Community Center","Collage night starts at 6."],
+  ["🐾 Animal Rescue","Two new kittens arrived this morning."],
+  ["📖 Rabbit & Ink","Lucy put out a staff-picks shelf."],
+  ["🪞 Nevaeh’s Antique Shop","A box marked FREE is sitting by the register."],
+  ["🌿 Nature Center","Piper spotted baby rabbits near the trail."],
+  ["🖼️ Delilah’s Gallery","Someone dropped off a stack of tiny art postcards."],
+  ["🏛️ Children’s Museum","Bonnie is testing a new hands-on activity."]
+];
+const littleTownThings = [
+  "Someone has been leaving tiny crocheted mushrooms around town.",
+  "A hand-drawn flyer says: LOST — one extremely sentimental gel pen.",
+  "There are sidewalk chalk stars leading toward the library.",
+  "Someone put googly eyes on the community mailbox.",
+  "A mystery person is leaving encouraging sticky notes in public places.",
+  "Three different people are carrying the exact same thrifted tote bag today.",
+  "A very friendly orange cat has apparently visited four businesses this morning.",
+  "Someone burned a stack of Brookside Summer Mix CDs and left them around town."
+];
+
+const chats = [
+  {
+    lines:[
+      ["Clarissa","does anyone need anything from target"],
+      ["Lucy","no"],
+      ["Clarissa","that wasn't really the question"],
+      ["Tailia","sour gummy worms"],
+      ["Lea","poster board for the library please"]
+    ],
+    replies:["get me a little treat","I need absolutely nothing","check the dollar spot"],
+    after:["Clarissa","okay little treat is dangerously vague but noted"]
+  },
+  {
+    lines:[
+      ["Lea","who left a tiny plastic frog on my desk"],
+      ["Tailia","not me"],
+      ["Clarissa","define left"],
+      ["Lucy","Clarissa."],
+      ["Clarissa","wow okay"]
+    ],
+    replies:["the frog lives there now","I support this","ask him"],
+    after:["Lea","fine. his name is Desk Frog now."]
+  },
+  {
+    lines:[
+      ["Nevaeh","emergency"],
+      ["Delilah","what"],
+      ["Nevaeh","I found a lamp"],
+      ["Clarissa","that's not an emergency"],
+      ["Nevaeh","you haven't seen the lamp"]
+    ],
+    replies:["SHOW US","buy the lamp","I am afraid"],
+    after:["Nevaeh","photo incoming. prepare yourselves."]
+  },
+  {
+    lines:[
+      ["Tailia","paws is dead right now"],
+      ["Clarissa","make me something weird"],
+      ["Tailia","already doing it"],
+      ["Lucy","what does weird mean"],
+      ["Tailia","two syrups minimum"]
+    ],
+    replies:["add sprinkles","this feels unsafe","I want one too"],
+    after:["Tailia","excellent. chaos drinks for everyone."]
+  }
+];
+
+const collectibles = [
+  {icon:"🐛",name:"Library Bookworm",type:"Sticker"},
+  {icon:"☕",name:"Paws Coffee Cup",type:"Sticker"},
+  {icon:"💿",name:"Brookside Summer Mix '02",type:"CD"},
+  {icon:"🐸",name:"Tiny Thrift Frog",type:"Trinket"},
+  {icon:"🌼",name:"Brookside Daisy",type:"Sticker"},
+  {icon:"🔑",name:"Mystery Motel Key",type:"Keychain"},
+  {icon:"📚",name:"Used Book Sale",type:"Bookmark"},
+  {icon:"🐾",name:"Paws & Claws",type:"Sticker"},
+  {icon:"🌙",name:"Lucky Moon Charm",type:"Charm"},
+  {icon:"🎟️",name:"First Friday",type:"Ticket"}
+];
+
+function getInventory(){
+  try{return JSON.parse(localStorage.getItem("brooksideInventory")||"[]")}catch(e){return []}
+}
+function saveInventory(items){
+  localStorage.setItem("brooksideInventory",JSON.stringify(items));
+  updateStuffCount();
+}
+function updateStuffCount(){
+  const el=document.getElementById("stuffCount");
+  if(el) el.textContent=`(${getInventory().length})`;
+}
+function maybeCollect(containerId){
+  if(Math.random() > .38) return;
+  const item=pick(collectibles);
+  const inventory=getInventory();
+  const already=inventory.some(x=>x.name===item.name);
+  const box=document.getElementById(containerId);
+  if(!box || already) return;
+  const wrap=document.createElement("div");
+  wrap.className="collectible";
+  wrap.innerHTML=`
+    <span class="label">✨ You found something!</span>
+    <div class="bigicon">${item.icon}</div>
+    <h3>${item.name}</h3>
+    <div class="badge">${item.type}</div>
+    <p>A tiny Brookside collectible.</p>
+    <button class="btn-yellow small" onclick='keepCollectible(${JSON.stringify(item)},this)'>🎒 KEEP IT</button>`;
+  box.appendChild(wrap);
+}
+function keepCollectible(item,button){
+  const inv=getInventory();
+  if(!inv.some(x=>x.name===item.name)){inv.push(item);saveInventory(inv)}
+  button.textContent="✓ IN MY STUFF";
+  button.disabled=true;
+}
+function openStuff(){
+  show("stuff");
+  const inv=getInventory();
+  const grid=document.getElementById("inventory");
+  const empty=document.getElementById("stuffEmpty");
+  grid.innerHTML="";
+  if(!inv.length){empty.classList.remove("hidden");return}
+  empty.classList.add("hidden");
+  inv.forEach(item=>{
+    const d=document.createElement("div");
+    d.className="inventory-item";
+    d.innerHTML=`<span class="ico">${item.icon}</span><strong>${item.name}</strong><br><span>${item.type}</span>`;
+    grid.appendChild(d);
+  });
+}
+function openToday(){
+  show("today");
+  document.getElementById("todayDate").textContent=new Date().toLocaleDateString([], {weekday:"long",month:"long",day:"numeric"});
+  const list=document.getElementById("todayList");
+  list.innerHTML="";
+  shuffle(townHappenings).slice(0,5).forEach(([place,event])=>{
+    const d=document.createElement("div");
+    d.className="today-item";
+    d.innerHTML=`<strong>${place}</strong>${event}`;
+    list.appendChild(d);
+  });
+  document.getElementById("todayLittleThing").innerHTML=`
+    <div class="card yellow">
+      <span class="label">Today's little thing</span>
+      <p>${pick(littleTownThings)}</p>
+    </div>`;
+}
+function openChat(){
+  show("chat");
+  const chat=pick(chats);
+  const box=document.getElementById("chatBox");
+  box.innerHTML="";
+  chat.lines.forEach(([who,text])=>{
+    box.innerHTML+=`<div class="bubble them"><span class="who">${who}</span>${text}</div>`;
+  });
+  const replies=document.getElementById("chatReplies");
+  replies.innerHTML="";
+  chat.replies.forEach(text=>{
+    const b=document.createElement("button");
+    b.className="item";
+    b.textContent=text;
+    b.onclick=()=>sendChatReply(text,chat.after);
+    replies.appendChild(b);
+  });
+}
+function sendChatReply(text,after){
+  const box=document.getElementById("chatBox");
+  box.innerHTML+=`<div class="bubble me"><span class="who">You</span>${text}</div>`;
+  document.getElementById("chatReplies").innerHTML="";
+  setTimeout(()=>{
+    box.innerHTML+=`<div class="bubble them"><span class="who">${after[0]}</span>${after[1]}</div>`;
+    const holder=document.createElement("div");
+    holder.id="chatCollectibleHolder";
+    box.after(holder);
+    maybeCollect("chatCollectibleHolder");
+  },250);
+}
+
 function updateClock(){
   const now=new Date();
   document.getElementById("clock").textContent=now.toLocaleTimeString([], {hour:"numeric",minute:"2-digit"});
 }
-updateClock(); setInterval(updateClock,30000);
+updateClock(); updateStuffCount(); setInterval(updateClock,30000);
 </script>
 </body>
 </html>
