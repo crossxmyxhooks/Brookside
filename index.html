@@ -237,6 +237,38 @@ body[data-season="winter"] .season-ribbon{background:#e8f2f8}
 body[data-season="spring"] .season-ribbon{background:#e6f2dc}
 body[data-season="summer"] .season-ribbon{background:#fff0b8}
 
+
+/* --- Condensed home screen --- */
+.home-season-panel{margin-bottom:12px}
+.season-action{
+  margin-top:9px;padding:10px 12px;border-width:2px;border-radius:12px;
+  box-shadow:2px 2px 0 var(--ink);font-size:11px
+}
+.home-group{margin:13px 0}
+.home-group-title{
+  margin:0 2px 7px;font-size:10px;letter-spacing:1.6px;font-weight:900;color:var(--purple)
+}
+.home-button-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.home-btn{
+  min-height:58px;padding:10px 8px;border-width:2px;border-radius:14px;
+  box-shadow:3px 3px 0 var(--ink);font-size:17px;line-height:1.1
+}
+.home-btn span{display:block;margin-top:5px;font-size:10px;line-height:1.15;letter-spacing:.15px}
+.more-brookside{
+  margin:13px 0 11px;border:2px solid var(--ink);border-radius:15px;background:#fff;
+  box-shadow:3px 3px 0 var(--line);overflow:hidden
+}
+.more-brookside summary{
+  list-style:none;cursor:pointer;padding:12px 13px;font-size:11px;letter-spacing:1.2px;
+  font-weight:900;display:flex;align-items:center;justify-content:space-between;background:var(--cream)
+}
+.more-brookside summary::-webkit-details-marker{display:none}
+.more-arrow{font-size:18px;line-height:1;transition:transform .15s ease}
+.more-brookside[open] .more-arrow{transform:rotate(180deg)}
+.more-grid{padding:9px}
+.wide-home-btn{grid-column:1 / -1}
+.my-stuff-home{margin-top:4px;padding:11px 12px;font-size:12px;border-width:2px;box-shadow:3px 3px 0 var(--ink)}
+
 /* --- Tiny Brookside play features --- */
 .mini-feature{
   border:2px solid var(--ink);border-radius:18px;padding:16px;background:#fff;
@@ -286,7 +318,7 @@ body[data-season="summer"] .season-ribbon{background:#fff0b8}
           <p>Pick a tiny adventure, or let Brookside choose for you.</p>
         </div>
 
-        <div class="season-panel">
+        <div class="season-panel home-season-panel">
           <div class="season-title">
             <strong>What season is it in Brookside?</strong>
             <span class="season-current" id="seasonCurrent">Fall</span>
@@ -298,25 +330,41 @@ body[data-season="summer"] .season-ribbon{background:#fff0b8}
             <button class="season-btn" data-season-choice="winter" onclick="setBrooksideSeason('winter')">❄️ Winter</button>
           </div>
           <div class="season-ambient" id="seasonAmbient"></div>
+          <button id="seasonThingBtn" class="season-action btn-cream" onclick="openSeasonThing()">🍂 SEE WHAT'S HAPPENING</button>
         </div>
 
-        <div class="grid">
-          <button class="btn-pink" onclick="surpriseMe()">✨ SURPRISE ME</button>
-          <button class="btn-blue" onclick="openToday()">☀️ TODAY IN BROOKSIDE</button>
-          <button class="btn-yellow" onclick="openTinyThing()">✨ DO SOMETHING TINY</button>
-          <button class="btn-purple" onclick="openSighting()">👀 BROOKSIDE SIGHTING</button>
-          <button id="seasonThingBtn" class="btn-cream" onclick="openSeasonThing()">🍂 SOMETHING FALL</button>
-          <button class="btn-green" onclick="openThrift()">🛍️ THRIFT STORE RUN</button>
-          <button class="btn-yellow" onclick="openCoffee()">☕ PAWS COFFEE</button>
-          <button class="btn-purple" onclick="openLibrary()">📚 BROOKSIDE LIBRARY</button>
-          <button class="btn-pink" onclick="openRabbitInk()">📖 RABBIT &amp; INK</button>
-          <button class="btn-blue" onclick="openChat()">💬 GROUP CHAT</button>
-          <button class="btn-green" onclick="openAIM()">💻 BROOKSIDE AIM</button>
-          <button class="btn-yellow" onclick="openCall()">📞 SOMEONE'S CALLING</button>
-          <button class="btn-purple" onclick="openVending()">🥤 VENDING MACHINE</button>
-          <button class="btn-pink" onclick="openPhotoDump()">📸 PHOTO DUMP</button>
-          <button class="btn-blue" onclick="openStuff()">🎒 MY STUFF <span id="stuffCount"></span></button>
+        <div class="home-group">
+          <div class="home-group-title">PLAY TODAY</div>
+          <div class="home-button-grid">
+            <button class="btn-pink home-btn" onclick="surpriseMe()">✨ <span>SURPRISE ME</span></button>
+            <button class="btn-blue home-btn" onclick="openToday()">☀️ <span>TODAY IN BROOKSIDE</span></button>
+            <button class="btn-yellow home-btn" onclick="openTinyThing()">✨ <span>SOMETHING TINY</span></button>
+            <button class="btn-purple home-btn" onclick="openSighting()">👀 <span>BROOKSIDE SIGHTING</span></button>
+          </div>
         </div>
+
+        <div class="home-group">
+          <div class="home-group-title">GO SOMEWHERE</div>
+          <div class="home-button-grid">
+            <button class="btn-yellow home-btn" onclick="openCoffee()">☕ <span>PAWS COFFEE</span></button>
+            <button class="btn-purple home-btn" onclick="openLibrary()">📚 <span>LIBRARY</span></button>
+            <button class="btn-green home-btn" onclick="openThrift()">🛍️ <span>THRIFT STORE</span></button>
+            <button class="btn-pink home-btn" onclick="openRabbitInk()">📖 <span>RABBIT &amp; INK</span></button>
+          </div>
+        </div>
+
+        <details class="more-brookside">
+          <summary>MORE BROOKSIDE <span class="more-arrow">⌄</span></summary>
+          <div class="home-button-grid more-grid">
+            <button class="btn-blue home-btn" onclick="openChat()">💬 <span>GROUP CHAT</span></button>
+            <button class="btn-green home-btn" onclick="openAIM()">💻 <span>BROOKSIDE AIM</span></button>
+            <button class="btn-yellow home-btn" onclick="openCall()">📞 <span>SOMEONE'S CALLING</span></button>
+            <button class="btn-purple home-btn" onclick="openVending()">🥤 <span>VENDING MACHINE</span></button>
+            <button class="btn-pink home-btn wide-home-btn" onclick="openPhotoDump()">📸 <span>PHOTO DUMP</span></button>
+          </div>
+        </details>
+
+        <button class="btn-blue my-stuff-home" onclick="openStuff()">🎒 MY STUFF <span id="stuffCount"></span></button>
       </section>
 
       <section id="tinyThing" class="screen">
