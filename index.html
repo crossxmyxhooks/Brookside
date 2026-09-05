@@ -237,6 +237,17 @@ body[data-season="winter"] .season-ribbon{background:#e8f2f8}
 body[data-season="spring"] .season-ribbon{background:#e6f2dc}
 body[data-season="summer"] .season-ribbon{background:#fff0b8}
 
+/* --- Tiny Brookside play features --- */
+.mini-feature{
+  border:2px solid var(--ink);border-radius:18px;padding:16px;background:#fff;
+  margin:10px 0;box-shadow:3px 3px 0 var(--pink);text-align:center
+}
+.mini-feature .bigicon{font-size:38px;margin-bottom:5px}
+.mini-feature h3{font:700 23px/1.1 Georgia,serif;margin:4px 0 8px}
+.mini-feature p{margin:5px 0;line-height:1.45;font-size:14px}
+.season-pop-card{background:var(--cream);box-shadow:3px 3px 0 var(--yellow)}
+.season-pop-card.fall{background:#fff7e8;box-shadow:3px 3px 0 #e8c99d}
+
 @media print{
   body{background:#fff;padding:0}
   .shell,.footer{display:none!important}
@@ -292,6 +303,9 @@ body[data-season="summer"] .season-ribbon{background:#fff0b8}
         <div class="grid">
           <button class="btn-pink" onclick="surpriseMe()">✨ SURPRISE ME</button>
           <button class="btn-blue" onclick="openToday()">☀️ TODAY IN BROOKSIDE</button>
+          <button class="btn-yellow" onclick="openTinyThing()">✨ DO SOMETHING TINY</button>
+          <button class="btn-purple" onclick="openSighting()">👀 BROOKSIDE SIGHTING</button>
+          <button id="seasonThingBtn" class="btn-cream" onclick="openSeasonThing()">🍂 SOMETHING FALL</button>
           <button class="btn-green" onclick="openThrift()">🛍️ THRIFT STORE RUN</button>
           <button class="btn-yellow" onclick="openCoffee()">☕ PAWS COFFEE</button>
           <button class="btn-purple" onclick="openLibrary()">📚 BROOKSIDE LIBRARY</button>
@@ -302,6 +316,40 @@ body[data-season="summer"] .season-ribbon{background:#fff0b8}
           <button class="btn-purple" onclick="openVending()">🥤 VENDING MACHINE</button>
           <button class="btn-pink" onclick="openPhotoDump()">📸 PHOTO DUMP</button>
           <button class="btn-blue" onclick="openStuff()">🎒 MY STUFF <span id="stuffCount"></span></button>
+        </div>
+      </section>
+
+      <section id="tinyThing" class="screen">
+        <div class="card yellow">
+          <span class="label">Five-minute Brookside</span>
+          <h3>✨ Do Something Tiny</h3>
+          <p>No setup required. Just one little thing to do.</p>
+        </div>
+        <div id="tinyThingResult"></div>
+        <div class="navrow">
+          <button class="btn-cream small" onclick="goHome()">⌂ HOME</button>
+          <button class="btn-yellow small" onclick="makeTinyThing()">↻ ANOTHER TINY THING</button>
+        </div>
+      </section>
+
+      <section id="sighting" class="screen">
+        <div class="card purple">
+          <span class="label">Spotted around town</span>
+          <h3>👀 Brookside Sighting</h3>
+          <p>Nothing major. Just something somebody noticed.</p>
+        </div>
+        <div id="sightingResult"></div>
+        <div class="navrow">
+          <button class="btn-cream small" onclick="goHome()">⌂ HOME</button>
+          <button class="btn-purple small" onclick="makeSighting()">↻ LOOK AGAIN</button>
+        </div>
+      </section>
+
+      <section id="seasonThing" class="screen">
+        <div id="seasonThingResult"></div>
+        <div class="navrow">
+          <button class="btn-cream small" onclick="goHome()">⌂ HOME</button>
+          <button class="btn-pink small" onclick="makeSeasonThing()">↻ ANOTHER SEASONAL THING</button>
         </div>
       </section>
 
@@ -669,6 +717,8 @@ function applyBrooksideSeason(){
     const pool=brooksideSeasonalContent[season]?.ambient || [];
     ambient.textContent=pool.length ? pick(pool) : `${meta.label} is happening quietly around town.`;
   }
+  const seasonBtn=document.getElementById("seasonThingBtn");
+  if(seasonBtn) seasonBtn.textContent=`${meta.icon} SOMETHING ${meta.label.toUpperCase()}`;
   syncFallingLeaves();
 }
 function seasonalChance(chance=.25){ return Math.random()<chance; }
@@ -811,6 +861,72 @@ const boardFlyers = [
   "First Friday Gallery Night"
 ];
 
+const tinyThings = [
+  "Take a picture of one doll’s shoes.",
+  "Choose one sticker for somebody’s personal journal.",
+  "Pick two dolls and decide where they would run into each other today.",
+  "Roll or generate a Paws drink and make the tiniest coffee scene possible.",
+  "Put one strange object in a doll’s hand and decide where she got it.",
+  "Choose a piece of Brookside ephemera and decide who kept it.",
+  "Take one unnecessary picture for today’s camera roll.",
+  "Pick a doll and add one mundane thing to her bag today.",
+  "Choose one thrift-store object you already own and make it today’s weird find.",
+  "Put two dolls at a table together. What are they talking about?",
+  "Choose a handwritten note, receipt, or scrap of paper and tuck it into a notebook.",
+  "Pick a doll. Give her one very minor errand in Brookside.",
+  "Photograph something in your doll setup that looks accidentally funny.",
+  "Choose one tiny prop you have not used lately and work it into a scene.",
+  "Give somebody five minutes at the library, thrift store, or Paws. What does she notice?"
+];
+
+const brooksideSightings = [
+  "Someone left a little box marked FREE by the thrift-store register.",
+  "A very friendly orange cat is sitting somewhere it probably should not be.",
+  "There is a handwritten sign in a shop window with way too many exclamation points.",
+  "Someone is carrying three library books and a coffee at the same time. Poorly.",
+  "A tiny lost earring is sitting on the edge of a windowsill.",
+  "There is a new flyer on the community board, slightly crooked.",
+  "Someone parked outside Paws just long enough to run in for one drink.",
+  "A suspiciously cute mug has appeared at Brookside Thrift.",
+  "Two people are standing on the sidewalk looking at the same weird object in a window.",
+  "Someone dropped a receipt and it is skittering down the sidewalk.",
+  "There is a dog outside Paws wearing a bandana like it has somewhere important to be.",
+  "A stack of FREE STICKERS has appeared near a register somewhere in town.",
+  "Someone has put a tiny vase of grocery-store flowers on a counter.",
+  "A very specific handwritten list is sticking out of somebody’s tote bag.",
+  "The library return cart has one book with an alarming cover facing outward.",
+  "Somebody took a picture of a lamp because it was too strange not to document.",
+  "A little charm or trinket has been tied to a zipper pull.",
+  "One of the community-board flyers has exactly one tear-off tab left."
+];
+
+const seasonalThings = {
+  fall:[
+    {icon:"🍂",title:"First Leaf",text:"Take somebody to Piper’s Nature Center. Choose a fall leaf sticker and add it to a specimen card.",action:"NATURE CENTER NOTEBOOK"},
+    {icon:"🎃",title:"Code Orange",text:"Halloween merchandise has officially been spotted at Brookside Thrift. Go see what showed up.",action:"THRIFT",open:"openThrift"},
+    {icon:"☕",title:"Fall Menu Drop",text:"Talia put the seasonal menu out at Paws. Somebody obviously needs coffee.",action:"PAWS",open:"openCoffee"},
+    {icon:"📚",title:"Seasonal Display",text:"The library has a little fall display up. Pick a doll to browse it and choose one thing that catches her eye.",action:"LIBRARY",open:"openLibrary"},
+    {icon:"🍄",title:"Trail Find",text:"A mushroom has appeared beside the trail. Use a mushroom sticker or make a tiny nature-center observation.",action:"NATURE CENTER NOTEBOOK"},
+    {icon:"📸",title:"Document It",text:"Something around Brookside looks unmistakably fall today. Take one photo for the seasonal notebook.",action:"TAKE A PHOTO"},
+    {icon:"🧥",title:"Sweater Weather",text:"Pick somebody who has finally decided it is cool enough for a sweater. Build a tiny scene around where she is going.",action:"PLAY IT"},
+    {icon:"🧾",title:"Keep the Receipt",text:"Generate a Paws or thrift-store visit and save the receipt as evidence of Fall in Brookside.",action:"CHOOSE A LOCATION"},
+    {icon:"🪟",title:"Window Change",text:"A Brookside shop has changed its window for fall. Decide which location and add one tiny seasonal detail.",action:"SET THE SCENE"},
+    {icon:"🍁",title:"Leaf on the Sidewalk",text:"Pick a doll, a location, and one leaf sticker. That is the whole scene. See what happens from there.",action:"PLAY IT"}
+  ],
+  spring:[
+    {icon:"🌱",title:"Something Green",text:"Someone notices the first new growth around town. Pick a location and document it.",action:"PLAY IT"},
+    {icon:"🌷",title:"Spring Errand",text:"Pick a doll and send her somewhere in Brookside for one tiny spring errand.",action:"PLAY IT"}
+  ],
+  summer:[
+    {icon:"☀️",title:"Outside for No Reason",text:"Pick a doll and give her an excuse to spend ten minutes outside somewhere in Brookside.",action:"PLAY IT"},
+    {icon:"🥤",title:"Cold Drink Required",text:"Somebody needs an iced drink. Send her to Paws.",action:"PAWS",open:"openCoffee"}
+  ],
+  winter:[
+    {icon:"❄️",title:"Warm-Up Stop",text:"Pick a doll who has been out in the cold and send her somewhere warm in Brookside.",action:"PLAY IT"},
+    {icon:"☕",title:"Hot Drink Required",text:"This is clearly a Paws situation. Generate a drink and make a tiny winter coffee scene.",action:"PAWS",open:"openCoffee"}
+  ]
+};
+
 let currentArtifactHTML = "";
 
 function pick(arr){ return arr[Math.floor(Math.random()*arr.length)] }
@@ -821,7 +937,66 @@ function show(id){
   window.scrollTo({top:0,behavior:"smooth"});
 }
 function goHome(){ show("home"); }
-function surpriseMe(){ pick([openThrift,openCoffee,openMail,openLibrary])(); }
+function surpriseMe(){ pick([openThrift,openCoffee,openMail,openLibrary,openTinyThing,openSighting,openSeasonThing])(); }
+
+function openTinyThing(){
+  show("tinyThing");
+  makeTinyThing();
+}
+function makeTinyThing(){
+  const who=pick(characters);
+  const prompt=pick(tinyThings);
+  document.getElementById("tinyThingResult").innerHTML=`
+    <div class="mini-feature">
+      <div class="bigicon">✨</div>
+      <span class="label">Today’s tiny thing</span>
+      <h3>${who}</h3>
+      <p>${prompt}</p>
+    </div>`;
+}
+function openSighting(){
+  show("sighting");
+  makeSighting();
+}
+function makeSighting(){
+  const season=getBrooksideSeason();
+  const fallSightings=[
+    "Code Orange: a ceramic jack-o’-lantern mug has been spotted.",
+    "The first really orange leaf is stuck to the Paws window.",
+    "Someone is carrying a tiny pumpkin from one end of town to the other.",
+    "There is a box of old Halloween decorations at Brookside Thrift.",
+    "A leaf has blown inside the library and nobody seems in a hurry to move it."
+  ];
+  const pool=(season==="fall" && seasonalChance(.30)) ? brooksideSightings.concat(fallSightings) : brooksideSightings;
+  document.getElementById("sightingResult").innerHTML=`
+    <div class="mini-feature">
+      <div class="bigicon">👀</div>
+      <span class="label">Spotted just now</span>
+      <h3>${pick(pool)}</h3>
+      <p>That’s it. Brookside continues.</p>
+    </div>`;
+}
+function openSeasonThing(){
+  show("seasonThing");
+  makeSeasonThing();
+}
+function makeSeasonThing(){
+  const season=getBrooksideSeason();
+  const meta=seasonMeta[season];
+  const pool=seasonalThings[season] || [];
+  const thing=pick(pool);
+  if(!thing) return;
+  const action=thing.open ? `<button class="btn-pink small" onclick="${thing.open}()">${thing.action} →</button>` : `<div class="badge">${thing.action}</div>`;
+  document.getElementById("seasonThingResult").innerHTML=`
+    <div class="mini-feature season-pop-card ${season}">
+      <div class="bigicon">${thing.icon}</div>
+      <span class="label">${meta.label} in Brookside</span>
+      <h3>${thing.title}</h3>
+      <p>${thing.text}</p>
+      <div style="margin-top:12px">${action}</div>
+    </div>`;
+}
+
 
 function dateStamp(){
   const d = new Date();
