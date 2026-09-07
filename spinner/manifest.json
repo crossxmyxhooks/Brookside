@@ -1,0 +1,24 @@
+{
+  "name": "Brookside Play Pal",
+  "short_name": "Play Pal",
+  "description": "Brookside doll, location, and dice randomizer",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#d7c4ff",
+  "theme_color": "#d7c4ff",
+  "icons": [
+    {
+      "src": "spinner-icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "spinner-icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
