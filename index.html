@@ -225,6 +225,12 @@ button:active{transform:translate(4px,4px);box-shadow:none}
 .character-sprite{display:none;max-height:150px;max-width:145px;width:auto;height:auto;margin:8px auto 2px;object-fit:contain}
 .character-sprite.visible{display:block}
 .character-sprite.small-sprite{max-height:115px}
+.drink-sprite-wrap{
+  display:flex;justify-content:center;align-items:center;
+  width:150px;height:150px;margin:10px auto;padding:8px;
+  background:#fff;border:2px solid var(--ink);border-radius:18px;
+}
+.drink-sprite{display:block;max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;image-rendering:pixelated}
 
 body[data-season="fall"]{
   background:
@@ -1291,11 +1297,26 @@ function chooseMood(mood){
       <span class="label">${customer}'s mood</span>
       <p><strong>${mood}</strong></p>
     </div>
-    <button class="btn-blue" onclick='revealDrink(${JSON.stringify(drink)},${JSON.stringify(customer)})'>☕ TAILIA, MAKE THE DRINK</button>`;
+    <button class="btn-blue" onclick='revealDrink(${JSON.stringify(drink)},${JSON.stringify(customer)})'>☕ TALIA, MAKE THE DRINK</button>`;
+}
+function drinkSpriteFor(drink){
+  const order=drink.toLowerCase();
+  const hasWhip=order.includes("whipped cream");
+  const isBerry=order.includes("raspberry") || order.includes("strawberry") || order.includes("blackberry");
+  if(order.includes("iced matcha") && hasWhip) return "assets/paws-iced-matcha-whip.gif";
+  if(order.includes("iced") && isBerry && hasWhip) return "assets/paws-iced-pink-drink-whip.gif";
+  if((order.includes("iced coffee") || order.includes("cold brew")) && hasWhip) return "assets/paws-iced-coffee-whip.gif";
+  if(order.includes("iced latte")) return "assets/paws-iced-latte-milk.gif";
+  if(order.includes("iced coffee") || order.includes("cold brew")) return "assets/paws-iced-coffee.gif";
+  if(order.includes("hot") || order.includes("chai") || order.includes("americano") || order.includes("café au lait") || order.includes("mocha")){
+    return Math.random()<.5 ? "assets/paws-hot-coffee.gif" : "assets/paws-hot-coffee-to-go.gif";
+  }
+  return "assets/paws-iced-coffee.gif";
 }
 function revealDrink(drink,customer){
   const price=(4.25+Math.random()*2).toFixed(2);
   const reaction = pick(reactions);
+  const drinkSprite=drinkSpriteFor(drink);
   const souvenir = `
     <div class="souvenir">
       <div class="souvenir-title">PAWS COFFEE</div>
@@ -1313,6 +1334,7 @@ function revealDrink(drink,customer){
     <div class="card green">
       <span class="label">Today's creation</span>
       <h3>☕ ${customer}'s Drink</h3>
+      <div class="drink-sprite-wrap"><img class="drink-sprite" src="${drinkSprite}" alt="${drink} from Paws Coffee"></div>
       <p>${drink}</p>
       <p><strong>$${price}</strong></p>
     </div>
