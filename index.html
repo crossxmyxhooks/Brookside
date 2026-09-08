@@ -632,7 +632,7 @@ body[data-season="summer"] .season-ribbon{background:#fff0b8}
 <div id="printArea"></div>
 
 <script>
-const characters = ["Clarissa","Lucy","Lea Grace","Delilah","Nevaeh","Winnie","Clara June","Bonnie Bea","Piper"];
+const characters = ["Clarissa","Lucy","Lea Grace","Delilah","Nevaeh","Winnie","Clara June","Bonnie Bea","Piper","Hallie Jo"];
 
 const characterSprites = {
   "Clarissa":"assets/clarissa.gif",
@@ -1407,6 +1407,9 @@ function libraryBrowse(){
 }
 function finishBook(title,section){
   const visitor = document.getElementById("libraryVisitor").textContent;
+  const checkoutSprite = visitor === "Hallie Jo"
+    ? `<img class="character-sprite small-sprite visible" src="assets/hallie-jo-library-walking.gif" alt="Hallie Jo walking with her library books">`
+    : "";
   const souvenir = `
     <div class="souvenir">
       <div class="souvenir-title">BROOKSIDE LIBRARY</div>
@@ -1425,6 +1428,7 @@ function finishBook(title,section){
     <div class="card purple">
       <span class="label">Checked out</span>
       <h3>📖 ${title}</h3>
+      ${checkoutSprite}
       <p>Excellent choice.</p>
     </div>
     ${souvenir}
