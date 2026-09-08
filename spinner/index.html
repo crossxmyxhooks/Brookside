@@ -149,6 +149,27 @@ button:focus-visible { outline:4px solid white; outline-offset:3px; }
   font-size:17px;
   font-weight:1000;
 }
+.session-doll-row {
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.doll-gif {
+  display:none;
+  object-fit:contain;
+  image-rendering:pixelated;
+}
+.doll-gif.visible { display:block; }
+.session-doll-gif {
+  width:62px;
+  height:82px;
+  flex:0 0 62px;
+}
+.setup-doll-gif {
+  width:110px;
+  height:145px;
+  margin:7px auto 2px;
+}
 .session-route {
   font-size:10px;
   line-height:1.45;
@@ -452,7 +473,10 @@ button:focus-visible { outline:4px solid white; outline-offset:3px; }
           <span>TODAY'S ADVENTURE</span>
           <span id="sessionStopCounter">STOP 1/3</span>
         </div>
-        <div id="sessionDoll" class="session-doll"></div>
+        <div class="session-doll-row">
+          <img id="sessionDollGif" class="doll-gif session-doll-gif" alt="">
+          <div id="sessionDoll" class="session-doll"></div>
+        </div>
         <div id="sessionRoute" class="session-route"></div>
         <div class="session-stats">
           <span id="sessionCurrent" class="session-chip"></span>
@@ -489,6 +513,7 @@ button:focus-visible { outline:4px solid white; outline-offset:3px; }
         <div class="setup-card">
           <div class="setup-step">
             <div class="step-label">1. SPIN YOUR DOLL</div>
+            <img id="setupDollGif" class="doll-gif setup-doll-gif" alt="">
             <div id="setupDoll" class="step-value">...</div>
           </div>
 
@@ -628,6 +653,17 @@ button:focus-visible { outline:4px solid white; outline-offset:3px; }
     "Brookside Library"
   ];
 
+  const dollGifs = {
+    "Hallie Jo": "assets/dolls/hallie-jo.gif",
+    "Maisie O'Connor": "assets/dolls/maisie-oconnor.gif",
+    "Kennley Ann": "assets/dolls/kennley-anne.gif",
+    "Clara June Bennet": "assets/dolls/clara-june-bennet.gif",
+    "Talia": "assets/dolls/talia.gif",
+    "Lucy Bennet": "assets/dolls/lucy-bennet.gif",
+    "Lea Grace": "assets/dolls/lea-grace.gif",
+    "Clarissa": "assets/dolls/clarissa-jade.gif"
+  };
+
   const wheelColors = [
     "#ff67b3","#c7ff55","#9d72ff","#ff9a3c","#75e6e6","#ffd967"
   ];
@@ -754,12 +790,26 @@ button:focus-visible { outline:4px solid white; outline-offset:3px; }
 
   const sessionStrip = document.getElementById("sessionStrip");
   const sessionDoll = document.getElementById("sessionDoll");
+  const sessionDollGif = document.getElementById("sessionDollGif");
   const sessionRoute = document.getElementById("sessionRoute");
   const sessionCurrent = document.getElementById("sessionCurrent");
   const sessionRolls = document.getElementById("sessionRolls");
   const sessionSurprises = document.getElementById("sessionSurprises");
   const sessionStopCounter = document.getElementById("sessionStopCounter");
   const nextStopButton = document.getElementById("nextStopButton");
+
+  function showDollGif(image, doll) {
+    const source = dollGifs[doll];
+    if (!source) {
+      image.removeAttribute("src");
+      image.alt = "";
+      image.classList.remove("visible");
+      return;
+    }
+    image.src = source;
+    image.alt = `${doll} animated doll`;
+    image.classList.add("visible");
+  }
 
   function currentStop() {
     if (!session) return null;
@@ -786,6 +836,7 @@ button:focus-visible { outline:4px solid white; outline-offset:3px; }
 
     sessionStrip.classList.add("active");
     sessionDoll.textContent = `👤 ${session.doll}`;
+    showDollGif(sessionDollGif, session.doll);
     sessionRoute.textContent = `📍 ${session.stops.map(s => s.location).join(" → ")}`;
     sessionCurrent.textContent = `NOW: ${stop.location}`;
     sessionRolls.textContent = `🎲 ${totals.rolls} ROLLS`;
@@ -804,6 +855,7 @@ button:focus-visible { outline:4px solid white; outline-offset:3px; }
      ================================ */
 
   const setupDoll = document.getElementById("setupDoll");
+  const setupDollGif = document.getElementById("setupDollGif");
   const setupStops = document.getElementById("setupStops");
 
   function prepareAdventure() {
@@ -819,6 +871,7 @@ button:focus-visible { outline:4px solid white; outline-offset:3px; }
     pendingSetup = { doll, route };
 
     setupDoll.textContent = `★ ${doll}`;
+    showDollGif(setupDollGif, doll);
     setupStops.innerHTML = "";
 
     route.forEach(location => {
