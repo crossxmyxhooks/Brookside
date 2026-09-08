@@ -4,977 +4,601 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Brookside Play Spinner</title>
+<title>Brookside Play Pal</title>
 
-<!-- Browser favicon -->
 <link rel="icon" type="image/png" href="spinner-icon.png">
-
-<!-- iPhone/iPad Home Screen icon -->
 <link rel="apple-touch-icon" href="spinner-icon.png">
+<link rel="manifest" href="manifest.json">
 
-<!-- Mobile app appearance -->
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Brookside Play">
-
 <meta name="theme-color" content="#d7c4ff">
 
-<!-- Android / PWA information -->
-<link rel="manifest" href="manifest.json">
-  
 <style>
-  :root {
-    --pink: #ff67b3;
-    --hotpink: #ff3b9d;
-    --lime: #c7ff55;
-    --purple: #9d72ff;
-    --orange: #ff9a3c;
-    --aqua: #75e6e6;
-
-    --ink: #34254c;
-    --screen: #efffc9;
-    --screen-dark: #263b28;
-    --case: #d7c4ff;
-    --case-dark: #a486df;
-
-    --white: #fffdf7;
-  }
-
-  * {
-    box-sizing: border-box;
-  }
-
-  body {
-    margin: 0;
-    min-height: 100vh;
-    padding: 18px;
-    font-family: "Trebuchet MS", Arial, sans-serif;
-    color: var(--ink);
-
-    background:
-      radial-gradient(circle at 15px 15px, rgba(255,255,255,.55) 2px, transparent 3px)
-      0 0 / 30px 30px,
-      linear-gradient(135deg, #ffb4dc, #d9c8ff 50%, #baf3e4);
-  }
-
-  button {
-    font: inherit;
-  }
-
-  .app {
-    width: min(100%, 570px);
-    margin: 0 auto;
-  }
-
-  /* handheld shell */
-
-  .toy {
-    position: relative;
-    padding: 22px 18px 24px;
-
-    border: 4px solid #755ba2;
-    border-radius: 38px;
-
-    background:
-      linear-gradient(
-        145deg,
-        rgba(255,255,255,.5),
-        transparent 25%
-      ),
-      var(--case);
-
-    box-shadow:
-      inset 5px 5px rgba(255,255,255,.45),
-      inset -6px -7px rgba(82,55,127,.18),
-      0 8px 0 #6a518c,
-      0 14px 22px rgba(54,35,89,.25);
-  }
-
-  .screw {
-    position: absolute;
-    width: 13px;
-    height: 13px;
-    border-radius: 50%;
-    background: #8d76b6;
-    border: 2px solid #6b568d;
-  }
-
-  .screw::after {
-    content: "";
-    position: absolute;
-    left: 2px;
-    right: 2px;
-    top: 4px;
-    height: 2px;
-    background: #604f7d;
-    transform: rotate(-20deg);
-  }
-
-  .s1 { top: 17px; left: 18px; }
-  .s2 { top: 17px; right: 18px; }
-  .s3 { bottom: 19px; left: 18px; }
-  .s4 { bottom: 19px; right: 18px; }
-
-  .brand {
-    text-align: center;
-    margin-bottom: 13px;
-  }
-
-  .brand-title {
-    margin: 0;
-    font-size: clamp(25px, 7vw, 38px);
-    line-height: 1;
-    letter-spacing: -1px;
-
-    text-shadow:
-      2px 2px 0 #fff,
-      4px 4px 0 rgba(116,80,158,.25);
-  }
-
-  .brand-sub {
-    margin: 7px 0 0;
-    font-size: 12px;
-    font-weight: 900;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-  }
-
-  .decor {
-    letter-spacing: 5px;
-    color: var(--hotpink);
-  }
-
-  /* fake LCD */
-
-  .lcd-frame {
-    border: 5px solid #755f97;
-    border-radius: 23px;
-    padding: 10px;
-
-    background: #9278b4;
-
-    box-shadow:
-      inset 0 4px rgba(44,31,67,.35),
-      0 3px rgba(255,255,255,.45);
-  }
-
-  .lcd {
-    min-height: 415px;
-    padding: 17px 14px;
-
-    border-radius: 14px;
-
-    color: var(--screen-dark);
-
-    background:
-      linear-gradient(
-        rgba(50,90,50,.04) 1px,
-        transparent 1px
-      ) 0 0 / 100% 4px,
-      var(--screen);
-
-    box-shadow: inset 0 0 14px rgba(43,68,40,.25);
-  }
-
-  .status {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-
-    margin-bottom: 15px;
-    padding-bottom: 8px;
-
-    border-bottom: 2px dashed rgba(38,59,40,.35);
-
-    font-family: "Courier New", monospace;
-    font-size: 11px;
-    font-weight: 900;
-  }
-
-  .battery {
-    display: inline-flex;
-    align-items: center;
-    gap: 2px;
-  }
-
-  .battery-box {
-    display: inline-flex;
-    gap: 2px;
-    padding: 2px;
-    border: 2px solid currentColor;
-  }
-
-  .battery-box i {
-    display: block;
-    width: 4px;
-    height: 7px;
-    background: currentColor;
-  }
-
-  /* menu */
-
-  .menu {
-    display: grid;
-    gap: 11px;
-  }
-
-  .menu-button {
-    min-height: 58px;
-    width: 100%;
-
-    border: 3px solid var(--ink);
-    border-radius: 17px;
-
-    color: var(--ink);
-    font-weight: 1000;
-    font-size: 17px;
-    letter-spacing: .4px;
-
-    box-shadow: 0 5px 0 var(--ink);
-
-    cursor: pointer;
-  }
-
-  .menu-button:active {
-    transform: translateY(4px);
-    box-shadow: 0 1px 0 var(--ink);
-  }
-
-  .pink { background: var(--pink); }
-  .lime { background: var(--lime); }
-  .orange { background: var(--orange); }
-  .aqua { background: var(--aqua); }
-
-  .visit-button {
-    margin-top: 16px;
-    background: var(--purple);
-    color: white;
-    text-shadow: 1px 1px #5b3d8e;
-  }
-
-  /* screens */
-
-  .screen {
-    display: none;
-  }
-
-  .screen.active {
-    display: block;
-  }
-
-  .screen-heading {
-    margin: 3px 0 13px;
-    text-align: center;
-    font-size: 22px;
-  }
-
-  .back {
-    border: 0;
-    background: transparent;
-    color: var(--screen-dark);
-    font-weight: 900;
-    cursor: pointer;
-    padding: 5px;
-    margin-bottom: 4px;
-  }
-
-  /* wheels */
-
-  .wheel-area {
-    display: grid;
-    place-items: center;
-    position: relative;
-    margin: 8px auto 14px;
-    width: min(315px, 88vw);
-    aspect-ratio: 1;
-  }
-
-  .pointer {
-    position: absolute;
-    z-index: 5;
-    top: -5px;
-
-    width: 0;
-    height: 0;
-
-    border-left: 15px solid transparent;
-    border-right: 15px solid transparent;
-    border-top: 31px solid var(--hotpink);
-
-    filter: drop-shadow(0 2px 0 var(--ink));
-  }
-
-  .wheel {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-
-    border: 6px solid var(--ink);
-
-    box-shadow:
-      inset 0 0 0 4px white,
-      0 6px 0 rgba(52,37,76,.2);
-
-    transition:
-      transform 3.8s cubic-bezier(.16,.72,.12,1);
-  }
-
-  .wheel-center {
-    position: absolute;
-    z-index: 3;
-
-    width: 60px;
-    height: 60px;
-
-    display: grid;
-    place-items: center;
-
-    border-radius: 50%;
-    border: 4px solid var(--ink);
-
-    background: var(--white);
-
-    font-size: 26px;
-    font-weight: 1000;
-  }
-
-  .result {
-    min-height: 57px;
-    display: grid;
-    place-items: center;
-
-    margin: 12px 0;
-    padding: 9px 12px;
-
-    border: 3px dashed var(--screen-dark);
-    border-radius: 12px;
-
-    text-align: center;
-    font-family: "Courier New", monospace;
-    font-size: 19px;
-    font-weight: 900;
-  }
-
-  .spin-button {
-    width: 100%;
-    min-height: 54px;
-
-    border: 3px solid var(--ink);
-    border-radius: 999px;
-
-    background: var(--hotpink);
-    color: white;
-
-    font-weight: 1000;
-    font-size: 18px;
-
-    box-shadow: 0 5px 0 var(--ink);
-
-    cursor: pointer;
-  }
-
-  .spin-button:active {
-    transform: translateY(4px);
-    box-shadow: 0 1px 0 var(--ink);
-  }
-
-  .spin-button:disabled {
-    opacity: .55;
-    cursor: wait;
-  }
-
-  /* dice */
-
-  .dice-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 9px;
-  }
-
-  .die-button {
-    min-height: 62px;
-
-    border: 3px solid var(--ink);
-    border-radius: 13px;
-
-    background: var(--white);
-    color: var(--ink);
-
-    font-size: 18px;
-    font-weight: 1000;
-
-    box-shadow: 0 4px 0 var(--ink);
-    cursor: pointer;
-  }
-
-  .die-button:nth-child(2n) {
-    background: var(--pink);
-  }
-
-  .die-button:nth-child(3n) {
-    background: var(--lime);
-  }
-
-  .die-button:active {
-    transform: translateY(3px);
-    box-shadow: 0 1px 0 var(--ink);
-  }
-
-  .die-display {
-    width: 115px;
-    height: 115px;
-
-    display: grid;
-    place-items: center;
-
-    margin: 20px auto;
-
-    border: 5px solid var(--ink);
-    border-radius: 22px;
-
-    background: white;
-
-    font-family: "Courier New", monospace;
-    font-size: 52px;
-    font-weight: 1000;
-
-    box-shadow: 6px 6px 0 var(--purple);
-  }
-
-  .rolling {
-    animation: shake .12s linear infinite alternate;
-  }
-
-  @keyframes shake {
-    from { transform: rotate(-7deg) translateX(-3px); }
-    to { transform: rotate(7deg) translateX(3px); }
-  }
-
-  /* visit */
-
-  .visit-card {
-    border: 4px solid var(--screen-dark);
-    border-radius: 16px;
-    background: rgba(255,255,255,.45);
-    padding: 16px;
-    text-align: center;
-  }
-
-  .visit-small {
-    margin: 5px 0;
-    font-family: "Courier New", monospace;
-    font-size: 12px;
-    font-weight: bold;
-  }
-
-  .visit-big {
-    margin: 6px 0 16px;
-    font-size: 24px;
-    font-weight: 1000;
-  }
-
-  .sparkles {
-    font-size: 25px;
-    letter-spacing: 7px;
-  }
-
-  /* history */
-
-  .history-list {
-    display: grid;
-    gap: 8px;
-    max-height: 270px;
-    overflow-y: auto;
-  }
-
-  .history-item {
-    padding: 8px 10px;
-    border-bottom: 2px dashed rgba(38,59,40,.35);
-    font-family: "Courier New", monospace;
-    font-size: 12px;
-    font-weight: bold;
-  }
-
-  .clear-history {
-    margin-top: 14px;
-    padding: 9px 13px;
-
-    border: 2px solid var(--screen-dark);
-    border-radius: 9px;
-
-    background: transparent;
-
-    font-weight: bold;
-    cursor: pointer;
-  }
-
-  /* controls under device */
-
-  .bottom-controls {
-    display: flex;
-    justify-content: center;
-    gap: 14px;
-
-    margin-top: 17px;
-  }
-
-  .round-control {
-    width: 53px;
-    height: 53px;
-
-    display: grid;
-    place-items: center;
-
-    border-radius: 50%;
-    border: 3px solid var(--ink);
-
-    background: var(--orange);
-
-    box-shadow: 0 4px 0 var(--ink);
-
-    font-size: 20px;
-    cursor: pointer;
-  }
-
-  .round-control:nth-child(2) {
-    background: var(--lime);
-  }
-
-  .speaker {
-    display: flex;
-    justify-content: center;
-    gap: 7px;
-
-    margin-top: 20px;
-  }
-
-  .speaker span {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: rgba(65,43,98,.45);
-  }
-
-  .toy-label {
-    text-align: center;
-    margin-top: 10px;
-    font-size: 10px;
-    font-weight: 900;
-    letter-spacing: 2px;
-    opacity: .65;
-  }
-
-  @media (max-width: 390px) {
-    body {
-      padding: 8px;
-    }
-
-    .toy {
-      border-radius: 30px;
-      padding-left: 11px;
-      padding-right: 11px;
-    }
-
-    .lcd {
-      padding-left: 10px;
-      padding-right: 10px;
-    }
-
-    .dice-grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .wheel {
-      transition-duration: .01s;
-    }
-
-    .rolling {
-      animation: none;
-    }
-  }
+:root {
+  --pink:#ff67b3;
+  --hotpink:#ff3b9d;
+  --lime:#c7ff55;
+  --purple:#9d72ff;
+  --orange:#ff9a3c;
+  --aqua:#75e6e6;
+  --yellow:#ffd967;
+  --ink:#34254c;
+  --screen:#efffc9;
+  --screen-dark:#263b28;
+  --case:#d7c4ff;
+  --white:#fffdf7;
+}
+* { box-sizing:border-box; }
+body {
+  margin:0;
+  min-height:100vh;
+  padding:16px;
+  font-family:"Trebuchet MS", Arial, sans-serif;
+  color:var(--ink);
+  background:
+    radial-gradient(circle at 15px 15px, rgba(255,255,255,.55) 2px, transparent 3px) 0 0/30px 30px,
+    linear-gradient(135deg,#ffb4dc,#d9c8ff 50%,#baf3e4);
+}
+button { font:inherit; }
+button:focus-visible { outline:4px solid white; outline-offset:3px; }
+.app { width:min(100%,570px); margin:0 auto; }
+
+.toy {
+  position:relative;
+  padding:22px 18px 25px;
+  border:4px solid #755ba2;
+  border-radius:38px;
+  background:linear-gradient(145deg,rgba(255,255,255,.5),transparent 25%),var(--case);
+  box-shadow:
+    inset 5px 5px rgba(255,255,255,.45),
+    inset -6px -7px rgba(82,55,127,.18),
+    0 8px 0 #6a518c,
+    0 14px 22px rgba(54,35,89,.25);
+}
+.screw {
+  position:absolute;
+  width:13px;height:13px;
+  border-radius:50%;
+  background:#8d76b6;
+  border:2px solid #6b568d;
+}
+.screw::after {
+  content:"";
+  position:absolute;
+  left:2px;right:2px;top:4px;
+  height:2px;background:#604f7d;
+  transform:rotate(-20deg);
+}
+.s1{top:17px;left:18px}.s2{top:17px;right:18px}.s3{bottom:19px;left:18px}.s4{bottom:19px;right:18px}
+
+.brand { text-align:center; margin-bottom:13px; }
+.brand-title {
+  margin:0;
+  font-size:clamp(25px,7vw,38px);
+  line-height:1;
+  letter-spacing:-1px;
+  text-shadow:2px 2px 0 #fff,4px 4px 0 rgba(116,80,158,.25);
+}
+.brand-sub {
+  margin:7px 0 0;
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:2px;
+  text-transform:uppercase;
+}
+.decor { letter-spacing:5px;color:var(--hotpink); }
+
+.lcd-frame {
+  border:5px solid #755f97;
+  border-radius:23px;
+  padding:10px;
+  background:#9278b4;
+  box-shadow:inset 0 4px rgba(44,31,67,.35),0 3px rgba(255,255,255,.45);
+}
+.lcd {
+  min-height:470px;
+  padding:15px 13px;
+  border-radius:14px;
+  color:var(--screen-dark);
+  background:
+    linear-gradient(rgba(50,90,50,.04) 1px,transparent 1px) 0 0/100% 4px,
+    var(--screen);
+  box-shadow:inset 0 0 14px rgba(43,68,40,.25);
+}
+.status {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:10px;
+  padding-bottom:8px;
+  border-bottom:2px dashed rgba(38,59,40,.35);
+  font-family:"Courier New",monospace;
+  font-size:11px;
+  font-weight:900;
+}
+.battery { display:inline-flex;align-items:center;gap:2px; }
+.battery-box { display:inline-flex;gap:2px;padding:2px;border:2px solid currentColor; }
+.battery-box i { display:block;width:4px;height:7px;background:currentColor; }
+
+/* SESSION STRIP */
+.session-strip {
+  display:none;
+  margin:0 0 13px;
+  padding:10px;
+  border:3px solid var(--screen-dark);
+  border-radius:12px;
+  background:rgba(255,255,255,.38);
+  font-family:"Courier New",monospace;
+}
+.session-strip.active { display:block; }
+.session-kicker {
+  display:flex;
+  justify-content:space-between;
+  gap:8px;
+  align-items:center;
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:1px;
+}
+.session-doll {
+  margin:5px 0 3px;
+  font-family:"Trebuchet MS",Arial,sans-serif;
+  font-size:17px;
+  font-weight:1000;
+}
+.session-route {
+  font-size:10px;
+  line-height:1.45;
+  font-weight:700;
+}
+.session-stats {
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  margin-top:7px;
+  font-size:10px;
+  font-weight:900;
+}
+.session-chip {
+  padding:3px 6px;
+  border:2px solid currentColor;
+  border-radius:999px;
+}
+.session-actions {
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:7px;
+  margin-top:8px;
+}
+.tiny-btn {
+  min-height:38px;
+  border:2px solid var(--screen-dark);
+  border-radius:9px;
+  background:var(--lime);
+  color:var(--screen-dark);
+  font-weight:1000;
+  cursor:pointer;
+}
+.tiny-btn.secondary { background:transparent; }
+
+/* SCREENS */
+.screen { display:none; }
+.screen.active { display:block; }
+.screen-heading { margin:3px 0 13px;text-align:center;font-size:22px; }
+.back {
+  border:0;background:transparent;color:var(--screen-dark);
+  font-weight:900;cursor:pointer;padding:5px;margin-bottom:4px;
+}
+.menu { display:grid;gap:10px; }
+.menu-button {
+  min-height:56px;width:100%;
+  border:3px solid var(--ink);
+  border-radius:17px;
+  color:var(--ink);
+  font-weight:1000;
+  font-size:16px;
+  letter-spacing:.4px;
+  box-shadow:0 5px 0 var(--ink);
+  cursor:pointer;
+}
+.menu-button:active,.spin-button:active,.die-button:active,.round-control:active {
+  transform:translateY(4px);
+  box-shadow:0 1px 0 var(--ink);
+}
+.pink{background:var(--pink)} .lime{background:var(--lime)}
+.orange{background:var(--orange)} .aqua{background:var(--aqua)}
+.purple{background:var(--purple);color:white;text-shadow:1px 1px #5b3d8e}
+.new-adventure { margin-bottom:14px; }
+
+/* WHEELS */
+.wheel-area {
+  display:grid;place-items:center;position:relative;
+  margin:8px auto 14px;
+  width:min(315px,88vw);
+  aspect-ratio:1;
+}
+.pointer {
+  position:absolute;z-index:5;top:-5px;
+  width:0;height:0;
+  border-left:15px solid transparent;
+  border-right:15px solid transparent;
+  border-top:31px solid var(--hotpink);
+  filter:drop-shadow(0 2px 0 var(--ink));
+}
+.wheel {
+  width:100%;height:100%;
+  border-radius:50%;
+  border:6px solid var(--ink);
+  box-shadow:inset 0 0 0 4px white,0 6px 0 rgba(52,37,76,.2);
+  transition:transform 3.8s cubic-bezier(.16,.72,.12,1);
+}
+.wheel-center {
+  position:absolute;z-index:3;
+  width:60px;height:60px;
+  display:grid;place-items:center;
+  border-radius:50%;
+  border:4px solid var(--ink);
+  background:var(--white);
+  font-size:26px;font-weight:1000;
+}
+.result {
+  min-height:55px;
+  display:grid;place-items:center;
+  margin:12px 0;
+  padding:9px 12px;
+  border:3px dashed var(--screen-dark);
+  border-radius:12px;
+  text-align:center;
+  font-family:"Courier New",monospace;
+  font-size:17px;
+  font-weight:900;
+}
+.spin-button {
+  width:100%;min-height:54px;
+  border:3px solid var(--ink);
+  border-radius:999px;
+  background:var(--hotpink);
+  color:white;
+  font-weight:1000;font-size:18px;
+  box-shadow:0 5px 0 var(--ink);
+  cursor:pointer;
+}
+.spin-button:disabled { opacity:.55;cursor:wait; }
+
+/* DICE */
+.dice-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:9px; }
+.die-button {
+  min-height:62px;
+  border:3px solid var(--ink);
+  border-radius:13px;
+  background:var(--white);
+  color:var(--ink);
+  font-size:18px;font-weight:1000;
+  box-shadow:0 4px 0 var(--ink);
+  cursor:pointer;
+}
+.die-button:nth-child(2n){background:var(--pink)}
+.die-button:nth-child(3n){background:var(--lime)}
+.die-display {
+  width:115px;height:115px;
+  display:grid;place-items:center;
+  margin:16px auto;
+  border:5px solid var(--ink);
+  border-radius:22px;
+  background:white;
+  font-family:"Courier New",monospace;
+  font-size:52px;font-weight:1000;
+  box-shadow:6px 6px 0 var(--purple);
+}
+.rolling { animation:shake .12s linear infinite alternate; }
+@keyframes shake {
+  from{transform:rotate(-7deg) translateX(-3px)}
+  to{transform:rotate(7deg) translateX(3px)}
+}
+
+/* ADVENTURE */
+.setup-card,.visit-card,.summary-card,.event-card {
+  border:4px solid var(--screen-dark);
+  border-radius:16px;
+  background:rgba(255,255,255,.45);
+  padding:15px;
+}
+.setup-step {
+  padding:10px 0;
+  border-bottom:2px dashed rgba(38,59,40,.3);
+}
+.setup-step:last-child { border-bottom:0; }
+.step-label {
+  font-family:"Courier New",monospace;
+  font-size:11px;
+  font-weight:900;
+}
+.step-value { margin-top:3px;font-size:18px;font-weight:1000; }
+.route-list { margin:8px 0 0;padding-left:24px;font-weight:900; }
+.visit-small {
+  margin:5px 0;
+  font-family:"Courier New",monospace;
+  font-size:11px;font-weight:bold;
+}
+.visit-big { margin:6px 0 15px;font-size:24px;font-weight:1000; }
+.sparkles { font-size:24px;letter-spacing:7px;text-align:center; }
+
+.stop-row {
+  padding:9px 0;
+  border-bottom:2px dashed rgba(38,59,40,.3);
+}
+.stop-row:last-child { border-bottom:0; }
+.stop-title { font-weight:1000; }
+.stop-meta {
+  margin-top:4px;
+  font-family:"Courier New",monospace;
+  font-size:11px;font-weight:700;
+}
+.event-line { margin-top:3px; }
+
+/* EVENT OVERLAY INSIDE LCD */
+.event-overlay {
+  display:none;
+  position:absolute;
+  inset:0;
+  z-index:20;
+  padding:12px;
+  background:rgba(38,59,40,.68);
+  align-items:center;
+  justify-content:center;
+}
+.event-overlay.active { display:flex; }
+.lcd { position:relative; }
+.event-card {
+  width:min(100%,390px);
+  background:var(--screen);
+  box-shadow:7px 7px 0 var(--ink);
+}
+.event-type {
+  margin:0 0 8px;
+  text-align:center;
+  font-size:22px;
+}
+.event-copy {
+  font-family:"Courier New",monospace;
+  font-size:13px;
+  font-weight:800;
+  line-height:1.45;
+}
+.event-highlight {
+  margin:10px 0;
+  padding:9px;
+  border:3px dashed var(--screen-dark);
+  text-align:center;
+  font-size:18px;
+  font-weight:1000;
+}
+.event-actions { display:grid;gap:8px;margin-top:12px; }
+
+/* HISTORY */
+.history-list { display:grid;gap:9px;max-height:310px;overflow-y:auto; }
+.history-item {
+  padding:9px 10px;
+  border-bottom:2px dashed rgba(38,59,40,.35);
+  font-family:"Courier New",monospace;
+  font-size:11px;font-weight:bold;
+}
+.history-item strong { display:block;font-family:"Trebuchet MS",Arial,sans-serif;font-size:14px; }
+.clear-history {
+  margin-top:14px;padding:9px 13px;
+  border:2px solid var(--screen-dark);
+  border-radius:9px;background:transparent;
+  font-weight:bold;cursor:pointer;
+}
+
+/* HARDWARE */
+.bottom-controls { display:flex;justify-content:center;gap:14px;margin-top:17px; }
+.round-control {
+  width:53px;height:53px;
+  display:grid;place-items:center;
+  border-radius:50%;
+  border:3px solid var(--ink);
+  background:var(--orange);
+  box-shadow:0 4px 0 var(--ink);
+  font-size:20px;cursor:pointer;
+}
+.round-control:nth-child(2){background:var(--lime)}
+.speaker { display:flex;justify-content:center;gap:7px;margin-top:20px; }
+.speaker span { width:7px;height:7px;border-radius:50%;background:rgba(65,43,98,.45); }
+.toy-label {
+  text-align:center;margin-top:10px;
+  font-size:10px;font-weight:900;letter-spacing:2px;opacity:.65;
+}
+
+@media(max-width:390px){
+  body{padding:8px}
+  .toy{border-radius:30px;padding-left:11px;padding-right:11px}
+  .lcd{padding-left:10px;padding-right:10px}
+  .dice-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(prefers-reduced-motion:reduce){
+  .wheel{transition-duration:.01s}
+  .rolling{animation:none}
+}
 </style>
 </head>
 
 <body>
-
 <main class="app">
+<section class="toy">
+  <span class="screw s1"></span><span class="screw s2"></span>
+  <span class="screw s3"></span><span class="screw s4"></span>
 
-  <section class="toy">
+  <header class="brand">
+    <h1 class="brand-title">Brookside</h1>
+    <p class="brand-sub"><span class="decor">★</span> Play Pal <span class="decor">★</span></p>
+  </header>
 
-    <span class="screw s1"></span>
-    <span class="screw s2"></span>
-    <span class="screw s3"></span>
-    <span class="screw s4"></span>
+  <div class="lcd-frame">
+    <div class="lcd">
+      <div class="status">
+        <span id="modeLabel">PLAY MODE</span>
+        <span class="battery">BATT
+          <span class="battery-box"><i></i><i></i><i></i></span>
+        </span>
+      </div>
 
-    <header class="brand">
-      <h1 class="brand-title">
-        Brookside
-      </h1>
+      <!-- Persistent session strip -->
+      <section id="sessionStrip" class="session-strip" aria-live="polite">
+        <div class="session-kicker">
+          <span>TODAY'S ADVENTURE</span>
+          <span id="sessionStopCounter">STOP 1/3</span>
+        </div>
+        <div id="sessionDoll" class="session-doll"></div>
+        <div id="sessionRoute" class="session-route"></div>
+        <div class="session-stats">
+          <span id="sessionCurrent" class="session-chip"></span>
+          <span id="sessionRolls" class="session-chip"></span>
+          <span id="sessionSurprises" class="session-chip"></span>
+        </div>
+        <div class="session-actions">
+          <button id="nextStopButton" class="tiny-btn" type="button">NEXT STOP →</button>
+          <button id="endSessionButton" class="tiny-btn secondary" type="button">END</button>
+        </div>
+      </section>
 
-      <p class="brand-sub">
-        <span class="decor">★</span>
-        Play Pal
-        <span class="decor">★</span>
-      </p>
-    </header>
+      <!-- HOME -->
+      <section id="homeScreen" class="screen active">
+        <button id="newAdventureButton" class="menu-button purple new-adventure" type="button">
+          ✦ NEW ADVENTURE ✦
+        </button>
 
-
-    <div class="lcd-frame">
-      <div class="lcd">
-
-        <div class="status">
-          <span>PLAY MODE</span>
-
-          <span class="battery">
-            BATT
-            <span class="battery-box">
-              <i></i><i></i><i></i>
-            </span>
-          </span>
+        <div class="menu">
+          <button class="menu-button pink" data-open="dollScreen" type="button">💗 SPIN A DOLL</button>
+          <button class="menu-button lime" data-open="locationScreen" type="button">★ SPIN A PLACE</button>
+          <button class="menu-button orange" data-open="diceScreen" type="button">🎲 ROLL DICE</button>
+          <button class="menu-button aqua" data-open="historyScreen" type="button">💾 ADVENTURE LOG</button>
         </div>
 
+        <div class="result">START AN ADVENTURE OR USE A TOOL</div>
+      </section>
 
-        <!-- HOME -->
+      <!-- ADVENTURE SETUP -->
+      <section id="setupScreen" class="screen">
+        <button class="back" data-home type="button">◀ HOME</button>
+        <h2 class="screen-heading">NEW ADVENTURE</h2>
 
-        <section id="homeScreen" class="screen active">
-
-          <div class="menu">
-
-            <button
-              class="menu-button pink"
-              data-open="dollScreen"
-              type="button"
-            >
-              💗 SPIN A DOLL
-            </button>
-
-            <button
-              class="menu-button lime"
-              data-open="locationScreen"
-              type="button"
-            >
-              ★ SPIN A PLACE
-            </button>
-
-            <button
-              class="menu-button orange"
-              data-open="diceScreen"
-              type="button"
-            >
-              🎲 ROLL DICE
-            </button>
-
-            <button
-              class="menu-button aqua"
-              data-open="historyScreen"
-              type="button"
-            >
-              💾 MEMORY LOG
-            </button>
-
+        <div class="setup-card">
+          <div class="setup-step">
+            <div class="step-label">1. SPIN YOUR DOLL</div>
+            <div id="setupDoll" class="step-value">...</div>
           </div>
 
-
-          <button
-            id="visitButton"
-            class="menu-button visit-button"
-            type="button"
-          >
-            ✦ PLAY A VISIT ✦
-          </button>
-
-          <div class="result">
-            SELECT PLAY MODE
+          <div class="setup-step">
+            <div class="step-label">2. SPIN 3 STOPS</div>
+            <ol id="setupStops" class="route-list"></ol>
           </div>
+        </div>
 
-        </section>
+        <button id="startAdventureButton" class="spin-button" style="margin-top:14px" type="button">
+          START ADVENTURE! ★
+        </button>
+      </section>
 
+      <!-- DOLL SPINNER -->
+      <section id="dollScreen" class="screen">
+        <button class="back" data-home type="button">◀ HOME</button>
+        <h2 class="screen-heading">WHO'S GOING?</h2>
+        <div class="wheel-area">
+          <div class="pointer"></div>
+          <div id="dollWheel" class="wheel" aria-hidden="true"></div>
+          <div class="wheel-center">♥</div>
+        </div>
+        <div id="dollResult" class="result" aria-live="polite">PRESS SPIN</div>
+        <button id="spinDoll" class="spin-button" type="button">SPIN! ★</button>
+      </section>
 
-        <!-- DOLL SPINNER -->
+      <!-- LOCATION SPINNER -->
+      <section id="locationScreen" class="screen">
+        <button class="back" data-home type="button">◀ HOME</button>
+        <h2 class="screen-heading">WHERE TO?</h2>
+        <div class="wheel-area">
+          <div class="pointer"></div>
+          <div id="locationWheel" class="wheel" aria-hidden="true"></div>
+          <div class="wheel-center">★</div>
+        </div>
+        <div id="locationResult" class="result" aria-live="polite">PRESS SPIN</div>
+        <button id="spinLocation" class="spin-button" type="button">SPIN! ★</button>
+      </section>
 
-        <section id="dollScreen" class="screen">
+      <!-- DICE -->
+      <section id="diceScreen" class="screen">
+        <button class="back" data-home type="button">◀ HOME</button>
+        <h2 class="screen-heading">DICE TRAY</h2>
+        <div id="dieDisplay" class="die-display" aria-live="polite">?</div>
+        <div class="dice-grid">
+          <button class="die-button" data-die="4" type="button">D4</button>
+          <button class="die-button" data-die="6" type="button">D6</button>
+          <button class="die-button" data-die="8" type="button">D8</button>
+          <button class="die-button" data-die="10" type="button">D10</button>
+          <button class="die-button" data-die="12" type="button">D12</button>
+          <button class="die-button" data-die="20" type="button">D20</button>
+        </div>
+        <div id="diceResult" class="result">CHOOSE A DIE</div>
+      </section>
 
-          <button class="back" data-home type="button">
-            ◀ HOME
-          </button>
+      <!-- FINISH SUMMARY -->
+      <section id="summaryScreen" class="screen">
+        <button class="back" data-home type="button">◀ HOME</button>
+        <h2 class="screen-heading">ADVENTURE COMPLETE!</h2>
+        <div class="summary-card">
+          <div class="sparkles">★ ✿ ★</div>
+          <div id="summaryContent"></div>
+          <div class="sparkles">✿ ★ ✿</div>
+        </div>
+        <button id="summaryNewButton" class="spin-button" style="margin-top:14px" type="button">
+          NEW ADVENTURE
+        </button>
+      </section>
 
-          <h2 class="screen-heading">
-            WHO'S GOING?
-          </h2>
+      <!-- HISTORY -->
+      <section id="historyScreen" class="screen">
+        <button class="back" data-home type="button">◀ HOME</button>
+        <h2 class="screen-heading">ADVENTURE LOG</h2>
+        <div id="historyList" class="history-list"></div>
+        <button id="clearHistory" class="clear-history" type="button">CLEAR LOG</button>
+      </section>
 
-          <div class="wheel-area">
-
-            <div class="pointer"></div>
-
-            <div
-              id="dollWheel"
-              class="wheel"
-              aria-hidden="true"
-            ></div>
-
-            <div class="wheel-center">
-              ♥
-            </div>
-
+      <!-- BROOKSIDE MOMENT OVERLAY -->
+      <div id="eventOverlay" class="event-overlay" role="dialog" aria-modal="true" aria-labelledby="eventTitle">
+        <div class="event-card">
+          <h2 id="eventTitle" class="event-type">✨ BROOKSIDE MOMENT!</h2>
+          <div id="eventCopy" class="event-copy"></div>
+          <div id="eventHighlight" class="event-highlight"></div>
+          <div class="event-actions">
+            <button id="eventDiceButton" class="tiny-btn" type="button">GO TO DICE 🎲</button>
+            <button id="eventCloseButton" class="tiny-btn secondary" type="button">OKAY! ★</button>
           </div>
-
-          <div
-            id="dollResult"
-            class="result"
-            aria-live="polite"
-          >
-            PRESS SPIN
-          </div>
-
-          <button
-            id="spinDoll"
-            class="spin-button"
-            type="button"
-          >
-            SPIN! ★
-          </button>
-
-        </section>
-
-
-        <!-- LOCATION SPINNER -->
-
-        <section id="locationScreen" class="screen">
-
-          <button class="back" data-home type="button">
-            ◀ HOME
-          </button>
-
-          <h2 class="screen-heading">
-            WHERE TO?
-          </h2>
-
-          <div class="wheel-area">
-
-            <div class="pointer"></div>
-
-            <div
-              id="locationWheel"
-              class="wheel"
-              aria-hidden="true"
-            ></div>
-
-            <div class="wheel-center">
-              ★
-            </div>
-
-          </div>
-
-          <div
-            id="locationResult"
-            class="result"
-            aria-live="polite"
-          >
-            PRESS SPIN
-          </div>
-
-          <button
-            id="spinLocation"
-            class="spin-button"
-            type="button"
-          >
-            SPIN! ★
-          </button>
-
-        </section>
-
-
-        <!-- DICE -->
-
-        <section id="diceScreen" class="screen">
-
-          <button class="back" data-home type="button">
-            ◀ HOME
-          </button>
-
-          <h2 class="screen-heading">
-            DICE TRAY
-          </h2>
-
-          <div
-            id="dieDisplay"
-            class="die-display"
-            aria-live="polite"
-          >
-            ?
-          </div>
-
-          <div class="dice-grid">
-
-            <button class="die-button" data-die="4" type="button">
-              D4
-            </button>
-
-            <button class="die-button" data-die="6" type="button">
-              D6
-            </button>
-
-            <button class="die-button" data-die="8" type="button">
-              D8
-            </button>
-
-            <button class="die-button" data-die="10" type="button">
-              D10
-            </button>
-
-            <button class="die-button" data-die="12" type="button">
-              D12
-            </button>
-
-            <button class="die-button" data-die="20" type="button">
-              D20
-            </button>
-
-          </div>
-
-          <div
-            id="diceResult"
-            class="result"
-          >
-            CHOOSE A DIE
-          </div>
-
-        </section>
-
-
-        <!-- VISIT RESULT -->
-
-        <section id="visitScreen" class="screen">
-
-          <button class="back" data-home type="button">
-            ◀ HOME
-          </button>
-
-          <h2 class="screen-heading">
-            TODAY IN BROOKSIDE
-          </h2>
-
-          <div class="visit-card">
-
-            <div class="sparkles">
-              ★ ✿ ★
-            </div>
-
-            <p class="visit-small">
-              TODAY YOU ARE
-            </p>
-
-            <div
-              id="visitDoll"
-              class="visit-big"
-            ></div>
-
-            <p class="visit-small">
-              HEADED TO
-            </p>
-
-            <div
-              id="visitLocation"
-              class="visit-big"
-            ></div>
-
-            <div class="sparkles">
-              ✿ ★ ✿
-            </div>
-
-          </div>
-
-          <button
-            id="rerollVisit"
-            class="spin-button"
-            style="margin-top:16px;"
-            type="button"
-          >
-            NEW ADVENTURE!
-          </button>
-
-        </section>
-
-
-        <!-- HISTORY -->
-
-        <section id="historyScreen" class="screen">
-
-          <button class="back" data-home type="button">
-            ◀ HOME
-          </button>
-
-          <h2 class="screen-heading">
-            MEMORY LOG
-          </h2>
-
-          <div
-            id="historyList"
-            class="history-list"
-          ></div>
-
-          <button
-            id="clearHistory"
-            class="clear-history"
-            type="button"
-          >
-            CLEAR MEMORY
-          </button>
-
-        </section>
-
+        </div>
       </div>
-    </div>
-
-
-    <div class="bottom-controls">
-
-      <button
-        id="homeButton"
-        class="round-control"
-        aria-label="Home"
-        type="button"
-      >
-        ♥
-      </button>
-
-      <button
-        id="randomButton"
-        class="round-control"
-        aria-label="Play a random visit"
-        type="button"
-      >
-        ★
-      </button>
 
     </div>
+  </div>
 
+  <div class="bottom-controls">
+    <button id="homeButton" class="round-control" aria-label="Home" type="button">♥</button>
+    <button id="diceShortcut" class="round-control" aria-label="Dice tray" type="button">🎲</button>
+  </div>
 
-    <div class="speaker" aria-hidden="true">
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
-
-    <div class="toy-label">
-      BROOKSIDE ELECTRONIC PLAY PAL • 2003-ish
-    </div>
-
-  </section>
-
+  <div class="speaker" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><span></span>
+  </div>
+  <div class="toy-label">BROOKSIDE ELECTRONIC PLAY PAL • 2003-ish</div>
+</section>
 </main>
-
 
 <script>
 (() => {
-
   /* ================================
-     YOUR BROOKSIDE CONTENT
+     BROOKSIDE DATA
      ================================ */
 
   const dolls = [
@@ -997,669 +621,660 @@
     "Addy Walker"
   ];
 
-
+  /* Only physical notebooks that currently exist. */
   const locations = [
-  "Paws Coffee",
-  "Brookside Thrift",
-  "Brookside Library"
+    "Paws Coffee",
+    "Brookside Thrift",
+    "Brookside Library"
   ];
-
-
-  /* ================================
-     COLORS
-     ================================ */
 
   const wheelColors = [
-    "#ff67b3",
-    "#c7ff55",
-    "#9d72ff",
-    "#ff9a3c",
-    "#75e6e6",
-    "#ffd967"
+    "#ff67b3","#c7ff55","#9d72ff","#ff9a3c","#75e6e6","#ffd967"
   ];
 
+  /* Roughly 1 surprise per 10 digital rolls while an Adventure is active. */
+  const EVENT_CHANCE_DENOMINATOR = 10;
+  const EVENT_COOLDOWN_ROLLS = 2;
+
+  const STORAGE = {
+    session: "brookside-play-pal-active-session-v2",
+    history: "brookside-play-pal-adventure-history-v2"
+  };
 
   /* ================================
-     RANDOMNESS
+     SECURE RANDOM
      ================================ */
 
-  /*
-    Uses crypto.getRandomValues instead
-    of Math.random.
-
-    Rejection sampling avoids modulo bias.
-  */
-
   function secureRandomInt(max) {
-
-    if (
-      !Number.isInteger(max) ||
-      max <= 0
-    ) {
+    if (!Number.isInteger(max) || max <= 0) {
       throw new Error("max must be a positive integer");
     }
 
     const maxUint = 0x100000000;
-    const limit =
-      maxUint -
-      (maxUint % max);
-
-    const values =
-      new Uint32Array(1);
-
+    const limit = maxUint - (maxUint % max);
+    const values = new Uint32Array(1);
     let value;
 
     do {
       crypto.getRandomValues(values);
       value = values[0];
-    }
-    while (value >= limit);
+    } while (value >= limit);
 
     return value % max;
   }
 
-
   function randomFrom(array) {
-    return array[
-      secureRandomInt(array.length)
-    ];
+    return array[secureRandomInt(array.length)];
   }
 
+  function shuffle(array) {
+    const copy = [...array];
+    for (let i = copy.length - 1; i > 0; i--) {
+      const j = secureRandomInt(i + 1);
+      [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy;
+  }
+
+  /* ================================
+     STORAGE
+     ================================ */
+
+  function loadJSON(key, fallback) {
+    try {
+      const value = localStorage.getItem(key);
+      return value ? JSON.parse(value) : fallback;
+    } catch {
+      return fallback;
+    }
+  }
+
+  function saveJSON(key, value) {
+    try {
+      localStorage.setItem(key, JSON.stringify(value));
+    } catch {
+      /* The game still works without persistence. */
+    }
+  }
+
+  function clearStoredSession() {
+    try {
+      localStorage.removeItem(STORAGE.session);
+    } catch {}
+  }
+
+  let session = loadJSON(STORAGE.session, null);
+  let pendingSetup = null;
+
+  function saveSession() {
+    if (session) saveJSON(STORAGE.session, session);
+    else clearStoredSession();
+    renderSessionStrip();
+  }
 
   /* ================================
      SCREEN NAVIGATION
      ================================ */
 
-  const screens =
-    document.querySelectorAll(".screen");
+  const screens = document.querySelectorAll(".screen");
+  const modeLabel = document.getElementById("modeLabel");
+
+  const modeNames = {
+    homeScreen: "PLAY MODE",
+    setupScreen: "ADVENTURE SETUP",
+    dollScreen: "DOLL SPINNER",
+    locationScreen: "PLACE SPINNER",
+    diceScreen: "DICE MODE",
+    summaryScreen: "ADVENTURE LOG",
+    historyScreen: "MEMORY MODE"
+  };
 
   function showScreen(id) {
+    screens.forEach(screen => screen.classList.remove("active"));
+    const target = document.getElementById(id);
+    if (target) target.classList.add("active");
+    modeLabel.textContent = modeNames[id] || "PLAY MODE";
+    if (id === "historyScreen") renderHistory();
+  }
 
-    screens.forEach(screen => {
-      screen.classList.remove("active");
-    });
+  document.querySelectorAll("[data-open]").forEach(button => {
+    button.addEventListener("click", () => showScreen(button.dataset.open));
+  });
 
-    const target =
-      document.getElementById(id);
+  document.querySelectorAll("[data-home]").forEach(button => {
+    button.addEventListener("click", () => showScreen("homeScreen"));
+  });
 
-    if (target) {
-      target.classList.add("active");
+  document.getElementById("homeButton").addEventListener("click", () => showScreen("homeScreen"));
+  document.getElementById("diceShortcut").addEventListener("click", () => showScreen("diceScreen"));
+
+  /* ================================
+     SESSION DISPLAY
+     ================================ */
+
+  const sessionStrip = document.getElementById("sessionStrip");
+  const sessionDoll = document.getElementById("sessionDoll");
+  const sessionRoute = document.getElementById("sessionRoute");
+  const sessionCurrent = document.getElementById("sessionCurrent");
+  const sessionRolls = document.getElementById("sessionRolls");
+  const sessionSurprises = document.getElementById("sessionSurprises");
+  const sessionStopCounter = document.getElementById("sessionStopCounter");
+  const nextStopButton = document.getElementById("nextStopButton");
+
+  function currentStop() {
+    if (!session) return null;
+    return session.stops[session.currentStopIndex] || null;
+  }
+
+  function sessionTotals() {
+    if (!session) return { rolls: 0, surprises: 0 };
+    return session.stops.reduce((totals, stop) => {
+      totals.rolls += stop.rolls;
+      totals.surprises += stop.events.length;
+      return totals;
+    }, { rolls: 0, surprises: 0 });
+  }
+
+  function renderSessionStrip() {
+    if (!session) {
+      sessionStrip.classList.remove("active");
+      return;
     }
 
-    if (id === "historyScreen") {
-      renderHistory();
+    const stop = currentStop();
+    const totals = sessionTotals();
+
+    sessionStrip.classList.add("active");
+    sessionDoll.textContent = `👤 ${session.doll}`;
+    sessionRoute.textContent = `📍 ${session.stops.map(s => s.location).join(" → ")}`;
+    sessionCurrent.textContent = `NOW: ${stop.location}`;
+    sessionRolls.textContent = `🎲 ${totals.rolls} ROLLS`;
+    sessionSurprises.textContent = `✨ ${totals.surprises} SURPRISES`;
+    sessionStopCounter.textContent = `STOP ${session.currentStopIndex + 1}/${session.stops.length}`;
+
+    if (session.currentStopIndex >= session.stops.length - 1) {
+      nextStopButton.textContent = "FINISH ADVENTURE ★";
+    } else {
+      nextStopButton.textContent = "NEXT STOP →";
     }
   }
 
+  /* ================================
+     NEW ADVENTURE
+     ================================ */
 
-  document
-    .querySelectorAll("[data-open]")
-    .forEach(button => {
+  const setupDoll = document.getElementById("setupDoll");
+  const setupStops = document.getElementById("setupStops");
 
-      button.addEventListener(
-        "click",
-        () => {
-          showScreen(button.dataset.open);
-        }
-      );
+  function prepareAdventure() {
+    const doll = randomFrom(dolls);
 
+    /*
+      There are currently exactly three playable notebooks,
+      so the "3 stops" are a randomized order of all three.
+      No repeats.
+    */
+    const route = shuffle(locations);
+
+    pendingSetup = { doll, route };
+
+    setupDoll.textContent = `★ ${doll}`;
+    setupStops.innerHTML = "";
+
+    route.forEach(location => {
+      const li = document.createElement("li");
+      li.textContent = location;
+      setupStops.appendChild(li);
     });
 
+    showScreen("setupScreen");
+  }
 
-  document
-    .querySelectorAll("[data-home]")
-    .forEach(button => {
+  document.getElementById("newAdventureButton").addEventListener("click", prepareAdventure);
+  document.getElementById("summaryNewButton").addEventListener("click", prepareAdventure);
 
-      button.addEventListener(
-        "click",
-        () => {
-          showScreen("homeScreen");
-        }
-      );
+  document.getElementById("startAdventureButton").addEventListener("click", () => {
+    if (!pendingSetup) return;
 
-    });
+    session = {
+      id: Date.now(),
+      startedAt: new Date().toISOString(),
+      doll: pendingSetup.doll,
+      currentStopIndex: 0,
+      rollsSinceEvent: EVENT_COOLDOWN_ROLLS,
+      stops: pendingSetup.route.map(location => ({
+        location,
+        rolls: 0,
+        events: []
+      }))
+    };
 
-
-  document
-    .getElementById("homeButton")
-    .addEventListener(
-      "click",
-      () => showScreen("homeScreen")
-    );
-
+    pendingSetup = null;
+    saveSession();
+    showScreen("diceScreen");
+  });
 
   /* ================================
-     BUILD WHEELS
+     NEXT STOP / FINISH
+     ================================ */
+
+  nextStopButton.addEventListener("click", () => {
+    if (!session) return;
+
+    if (session.currentStopIndex < session.stops.length - 1) {
+      session.currentStopIndex += 1;
+      session.rollsSinceEvent = EVENT_COOLDOWN_ROLLS;
+      saveSession();
+      showScreen("diceScreen");
+      return;
+    }
+
+    finishAdventure();
+  });
+
+  document.getElementById("endSessionButton").addEventListener("click", () => {
+    if (session) finishAdventure();
+  });
+
+  function finishAdventure() {
+    if (!session) return;
+
+    const finished = {
+      ...session,
+      finishedAt: new Date().toISOString()
+    };
+
+    const history = loadJSON(STORAGE.history, []);
+    history.unshift(finished);
+    if (history.length > 30) history.length = 30;
+    saveJSON(STORAGE.history, history);
+
+    renderSummary(finished);
+
+    session = null;
+    saveSession();
+    showScreen("summaryScreen");
+  }
+
+  /* ================================
+     WHEELS
      ================================ */
 
   function makeGradient(count) {
-
-    const slice =
-      360 / count;
-
+    const slice = 360 / count;
     const sections = [];
 
-    for (
-      let i = 0;
-      i < count;
-      i++
-    ) {
-
-      const start =
-        i * slice;
-
-      const end =
-        start + slice;
-
-      const color =
-        wheelColors[
-          i % wheelColors.length
-        ];
-
-      sections.push(
-        `${color} ${start}deg ${end}deg`
-      );
+    for (let i = 0; i < count; i++) {
+      const start = i * slice;
+      const end = start + slice;
+      const color = wheelColors[i % wheelColors.length];
+      sections.push(`${color} ${start}deg ${end}deg`);
     }
 
     return `conic-gradient(${sections.join(",")})`;
   }
 
+  const dollWheel = document.getElementById("dollWheel");
+  const locationWheel = document.getElementById("locationWheel");
 
-  const dollWheel =
-    document.getElementById("dollWheel");
-
-  const locationWheel =
-    document.getElementById("locationWheel");
-
-
-  dollWheel.style.background =
-    makeGradient(dolls.length);
-
-  locationWheel.style.background =
-    makeGradient(locations.length);
-
+  dollWheel.style.background = makeGradient(dolls.length);
+  locationWheel.style.background = makeGradient(locations.length);
 
   let dollRotation = 0;
   let locationRotation = 0;
 
+  function animateWheel(wheel, items, selectedIndex, currentRotation) {
+    const slice = 360 / items.length;
+    const selectedCenter = selectedIndex * slice + slice / 2;
+    const extraSpins = 5 + secureRandomInt(4);
+    const normalized = ((currentRotation % 360) + 360) % 360;
+    const desired = 360 - selectedCenter;
 
-  function animateWheel(
-    wheel,
-    items,
-    selectedIndex,
-    currentRotation
-  ) {
+    let delta = desired - normalized;
+    if (delta < 0) delta += 360;
 
-    const slice =
-      360 / items.length;
-
-    /*
-      Center of selected wedge.
-    */
-
-    const selectedCenter =
-      selectedIndex * slice +
-      slice / 2;
-
-    /*
-      Wheel pointer sits at 12 o'clock.
-
-      Add several full rotations
-      before landing.
-    */
-
-    const extraSpins =
-      5 + secureRandomInt(4);
-
-    const normalized =
-      ((currentRotation % 360) + 360)
-      % 360;
-
-    const desired =
-      360 - selectedCenter;
-
-    let delta =
-      desired - normalized;
-
-    if (delta < 0) {
-      delta += 360;
-    }
-
-    const newRotation =
-      currentRotation +
-      extraSpins * 360 +
-      delta;
-
-    wheel.style.transform =
-      `rotate(${newRotation}deg)`;
-
+    const newRotation = currentRotation + extraSpins * 360 + delta;
+    wheel.style.transform = `rotate(${newRotation}deg)`;
     return newRotation;
   }
 
+  const spinDoll = document.getElementById("spinDoll");
+  const dollResult = document.getElementById("dollResult");
+
+  spinDoll.addEventListener("click", () => {
+    const index = secureRandomInt(dolls.length);
+    const result = dolls[index];
+
+    spinDoll.disabled = true;
+    dollResult.textContent = "SPINNING...";
+    dollRotation = animateWheel(dollWheel, dolls, index, dollRotation);
+
+    window.setTimeout(() => {
+      dollResult.textContent = `★ ${result} ★`;
+      spinDoll.disabled = false;
+    }, 3900);
+  });
+
+  const spinLocation = document.getElementById("spinLocation");
+  const locationResult = document.getElementById("locationResult");
+
+  spinLocation.addEventListener("click", () => {
+    const index = secureRandomInt(locations.length);
+    const result = locations[index];
+
+    spinLocation.disabled = true;
+    locationResult.textContent = "SPINNING...";
+    locationRotation = animateWheel(locationWheel, locations, index, locationRotation);
+
+    window.setTimeout(() => {
+      locationResult.textContent = `★ ${result} ★`;
+      spinLocation.disabled = false;
+    }, 3900);
+  });
 
   /* ================================
-     DOLL SPINNER
+     DICE + SESSION ROLL COUNTS
      ================================ */
 
-  const spinDoll =
-    document.getElementById("spinDoll");
+  const dieDisplay = document.getElementById("dieDisplay");
+  const diceResult = document.getElementById("diceResult");
+  let diceBusy = false;
 
-  const dollResult =
-    document.getElementById("dollResult");
+  document.querySelectorAll("[data-die]").forEach(button => {
+    button.addEventListener("click", () => {
+      if (diceBusy) return;
+      diceBusy = true;
 
+      const sides = Number(button.dataset.die);
+      dieDisplay.classList.add("rolling");
+      diceResult.textContent = `ROLLING D${sides}...`;
 
-  spinDoll.addEventListener(
-    "click",
-    () => {
+      let animationCount = 0;
+      const animation = window.setInterval(() => {
+        dieDisplay.textContent = secureRandomInt(sides) + 1;
+        animationCount++;
 
-      const index =
-        secureRandomInt(dolls.length);
+        if (animationCount >= 10) {
+          window.clearInterval(animation);
 
-      const result =
-        dolls[index];
+          const finalResult = secureRandomInt(sides) + 1;
+          dieDisplay.classList.remove("rolling");
+          dieDisplay.textContent = finalResult;
+          diceResult.textContent = `D${sides} → ${finalResult}`;
+          diceBusy = false;
 
-      spinDoll.disabled = true;
-
-      dollResult.textContent =
-        "SPINNING...";
-
-      dollRotation =
-        animateWheel(
-          dollWheel,
-          dolls,
-          index,
-          dollRotation
-        );
-
-
-      window.setTimeout(
-        () => {
-
-          dollResult.textContent =
-            `★ ${result} ★`;
-
-          spinDoll.disabled = false;
-
-          addHistory(
-            `DOLL → ${result}`
-          );
-
-        },
-        3900
-      );
-
-    }
-  );
-
-
-  /* ================================
-     LOCATION SPINNER
-     ================================ */
-
-  const spinLocation =
-    document.getElementById(
-      "spinLocation"
-    );
-
-  const locationResult =
-    document.getElementById(
-      "locationResult"
-    );
-
-
-  spinLocation.addEventListener(
-    "click",
-    () => {
-
-      const index =
-        secureRandomInt(
-          locations.length
-        );
-
-      const result =
-        locations[index];
-
-      spinLocation.disabled = true;
-
-      locationResult.textContent =
-        "SPINNING...";
-
-      locationRotation =
-        animateWheel(
-          locationWheel,
-          locations,
-          index,
-          locationRotation
-        );
-
-
-      window.setTimeout(
-        () => {
-
-          locationResult.textContent =
-            `★ ${result} ★`;
-
-          spinLocation.disabled = false;
-
-          addHistory(
-            `PLACE → ${result}`
-          );
-
-        },
-        3900
-      );
-
-    }
-  );
-
-
-  /* ================================
-     DICE
-     ================================ */
-
-  const dieDisplay =
-    document.getElementById(
-      "dieDisplay"
-    );
-
-  const diceResult =
-    document.getElementById(
-      "diceResult"
-    );
-
-
-  document
-    .querySelectorAll("[data-die]")
-    .forEach(button => {
-
-      button.addEventListener(
-        "click",
-        () => {
-
-          const sides =
-            Number(
-              button.dataset.die
-            );
-
-          dieDisplay.classList.add(
-            "rolling"
-          );
-
-          diceResult.textContent =
-            `ROLLING D${sides}...`;
-
-
-          let animationCount = 0;
-
-          const animation =
-            window.setInterval(
-              () => {
-
-                dieDisplay.textContent =
-                  secureRandomInt(sides)
-                  + 1;
-
-                animationCount++;
-
-                if (
-                  animationCount >= 10
-                ) {
-
-                  window.clearInterval(
-                    animation
-                  );
-
-                  const finalResult =
-                    secureRandomInt(
-                      sides
-                    ) + 1;
-
-                  dieDisplay.classList
-                    .remove("rolling");
-
-                  dieDisplay.textContent =
-                    finalResult;
-
-                  diceResult.textContent =
-                    `D${sides} → ${finalResult}`;
-
-                  addHistory(
-                    `D${sides} → ${finalResult}`
-                  );
-                }
-
-              },
-              70
-            );
-
+          registerSessionRoll();
         }
-      );
-
+      }, 70);
     });
+  });
 
+  function registerSessionRoll() {
+    if (!session) return;
+
+    const stop = currentStop();
+    stop.rolls += 1;
+    session.rollsSinceEvent += 1;
+    saveSession();
+
+    if (shouldTriggerEvent()) {
+      triggerEvent();
+    }
+  }
+
+  function shouldTriggerEvent() {
+    if (!session) return false;
+    if (session.rollsSinceEvent < EVENT_COOLDOWN_ROLLS) return false;
+    return secureRandomInt(EVENT_CHANCE_DENOMINATOR) === 0;
+  }
 
   /* ================================
-     PLAY A VISIT
+     BROOKSIDE MOMENTS
      ================================ */
 
-  const visitDoll =
-    document.getElementById(
-      "visitDoll"
-    );
-
-  const visitLocation =
-    document.getElementById(
-      "visitLocation"
-    );
-
-
-  function createVisit() {
-
-    const doll =
-      randomFrom(dolls);
-
-    const location =
-      randomFrom(locations);
-
-    visitDoll.textContent =
-      doll;
-
-    visitLocation.textContent =
-      location;
-
-    addHistory(
-      `VISIT → ${doll} @ ${location}`
-    );
-
-    showScreen(
-      "visitScreen"
-    );
-  }
-
-
-  document
-    .getElementById("visitButton")
-    .addEventListener(
-      "click",
-      createVisit
-    );
-
-
-  document
-    .getElementById("rerollVisit")
-    .addEventListener(
-      "click",
-      createVisit
-    );
-
-
-  document
-    .getElementById("randomButton")
-    .addEventListener(
-      "click",
-      createVisit
-    );
-
-
-  /* ================================
-     HISTORY
-     ================================ */
-
-  const HISTORY_KEY =
-    "brookside-play-pal-history";
-
-
-  function getHistory() {
-
-    try {
-
-      const saved =
-        localStorage.getItem(
-          HISTORY_KEY
-        );
-
-      return saved
-        ? JSON.parse(saved)
-        : [];
-
+  const universalEvents = [
+    {
+      type: "WHO JUST SHOWED UP?",
+      copy: "Someone you know just walked in.",
+      kind: "join"
+    },
+    {
+      type: "TINY PROBLEM",
+      copy: "Something has gone slightly wrong.",
+      highlight: "Roll D12 on your Tiny Problems table.",
+      needsDice: true
+    },
+    {
+      type: "SOMETHING FREE!",
+      copy: "A tiny freebie has appeared in your day.",
+      highlight: "Use the current notebook to decide what it is — sticker, sample, flyer, upgrade, free find, or whatever fits."
+    },
+    {
+      type: "BROOKSIDE MOMENT",
+      copy: "Something small is happening around you.",
+      highlight: "Add one atmospheric detail to the scene or Working Log."
+    },
+    {
+      type: "SOMEONE HAS NEWS",
+      copy: "A bit of Brookside information reaches you.",
+      highlight: "Generate or invent one tiny piece of town gossip, news, or upcoming-event information."
+    },
+    {
+      type: "TAKE SOMETHING WITH YOU",
+      copy: "You leave this stop with a little piece of the day.",
+      highlight: "Choose or generate one piece of ephemera for the Working Log / Yearbook."
     }
-    catch {
-      return [];
-    }
-  }
+  ];
 
+  const locationEvents = {
+    "Paws Coffee": [
+      {
+        type: "PAWS PERK!",
+        copy: "Something unexpectedly nice happens at the counter.",
+        highlight: "Your drink gets an upgrade, free add-on, sample, or surprise treat. Decide what fits today's order."
+      },
+      {
+        type: "PAWS MOMENT",
+        copy: "The café suddenly gives you something extra to notice.",
+        highlight: "Roll or choose one extra Paws detail: animal encounter, community-board item, seasonal special, or barista moment."
+      }
+    ],
+    "Brookside Thrift": [
+      {
+        type: "FRESH RACK!",
+        copy: "An employee just rolled out something that was not there before.",
+        highlight: "Roll one extra department or one extra thrift find."
+      },
+      {
+        type: "FREE BOX!",
+        copy: "You notice something interesting near the free section.",
+        highlight: "Use the Thrift notebook's Free Box generator."
+      }
+    ],
+    "Brookside Library": [
+      {
+        type: "COMMUNITY BOARD!",
+        copy: "Something interesting was just pinned up.",
+        highlight: "Roll for or choose a flyer / event / notice from the community board."
+      },
+      {
+        type: "LIBRARY EXTRA!",
+        copy: "Something catches your eye before you leave.",
+        highlight: "Roll one extra library activity or pick up one piece of library ephemera."
+      }
+    ]
+  };
 
-  function saveHistory(history) {
+  const eventOverlay = document.getElementById("eventOverlay");
+  const eventTitle = document.getElementById("eventTitle");
+  const eventCopy = document.getElementById("eventCopy");
+  const eventHighlight = document.getElementById("eventHighlight");
+  const eventDiceButton = document.getElementById("eventDiceButton");
 
-    try {
-
-      localStorage.setItem(
-        HISTORY_KEY,
-        JSON.stringify(history)
-      );
-
-    }
-    catch {
-      /* app still works */
-    }
-  }
-
-
-  function addHistory(text) {
-
-    const history =
-      getHistory();
-
-    history.unshift({
-      text,
-      time:
-        new Date()
-          .toLocaleString()
-    });
+  function buildEvent() {
+    const stop = currentStop();
 
     /*
-      Don't let the history
-      grow forever.
+      About 1/3 of surprises are allowed to be location-specific
+      when a location-specific event exists.
     */
+    const localPool = locationEvents[stop.location] || [];
+    const useLocal = localPool.length > 0 && secureRandomInt(3) === 0;
 
-    if (
-      history.length > 50
-    ) {
-      history.length = 50;
+    const event = useLocal ? randomFrom(localPool) : randomFrom(universalEvents);
+    const resolved = { ...event };
+
+    if (event.kind === "join") {
+      const possibleJoiners = dolls.filter(name => name !== session.doll);
+      const joiner = randomFrom(possibleJoiners);
+      resolved.highlight = `★ ${joiner} joined you at ${stop.location}.`;
+      resolved.joiner = joiner;
     }
 
-    saveHistory(history);
+    return resolved;
   }
 
+  function triggerEvent() {
+    if (!session) return;
 
-  function renderHistory() {
+    const event = buildEvent();
+    const stop = currentStop();
 
-    const container =
-      document.getElementById(
-        "historyList"
-      );
+    stop.events.push({
+      type: event.type,
+      highlight: event.highlight || "",
+      joiner: event.joiner || null
+    });
 
-    const history =
-      getHistory();
+    session.rollsSinceEvent = 0;
+    saveSession();
+
+    eventTitle.textContent = `✨ ${event.type}`;
+    eventCopy.textContent = event.copy;
+    eventHighlight.textContent = event.highlight || "";
+    eventHighlight.style.display = event.highlight ? "block" : "none";
+    eventDiceButton.style.display = event.needsDice ? "block" : "none";
+
+    eventOverlay.classList.add("active");
+  }
+
+  document.getElementById("eventCloseButton").addEventListener("click", () => {
+    eventOverlay.classList.remove("active");
+  });
+
+  eventDiceButton.addEventListener("click", () => {
+    eventOverlay.classList.remove("active");
+    showScreen("diceScreen");
+  });
+
+  /* ================================
+     SUMMARY + HISTORY
+     ================================ */
+
+  function formatDate(iso) {
+    const date = new Date(iso);
+    return date.toLocaleDateString(undefined, {
+      year: "numeric",
+      month: "long",
+      day: "numeric"
+    });
+  }
+
+  function renderSummary(adventure) {
+    const container = document.getElementById("summaryContent");
+    const totalRolls = adventure.stops.reduce((n, stop) => n + stop.rolls, 0);
+    const totalEvents = adventure.stops.reduce((n, stop) => n + stop.events.length, 0);
 
     container.innerHTML = "";
 
-    if (
-      history.length === 0
-    ) {
+    const title = document.createElement("div");
+    title.className = "visit-big";
+    title.textContent = `${adventure.doll.toUpperCase()}'S ADVENTURE`;
+    container.appendChild(title);
 
-      container.innerHTML =
-        `<div class="result">
-          NO MEMORIES YET
-        </div>`;
+    const date = document.createElement("div");
+    date.className = "visit-small";
+    date.textContent = formatDate(adventure.startedAt);
+    container.appendChild(date);
 
+    adventure.stops.forEach((stop, index) => {
+      const row = document.createElement("div");
+      row.className = "stop-row";
+
+      const heading = document.createElement("div");
+      heading.className = "stop-title";
+      heading.textContent = `STOP ${String(index + 1).padStart(2, "0")} — ${stop.location}`;
+      row.appendChild(heading);
+
+      const meta = document.createElement("div");
+      meta.className = "stop-meta";
+      meta.textContent = `🎲 ${stop.rolls} rolls · ✨ ${stop.events.length} surprise${stop.events.length === 1 ? "" : "s"}`;
+      row.appendChild(meta);
+
+      stop.events.forEach(event => {
+        const line = document.createElement("div");
+        line.className = "stop-meta event-line";
+        line.textContent = `↳ ${event.type}${event.joiner ? ` — ${event.joiner}` : ""}`;
+        row.appendChild(line);
+      });
+
+      container.appendChild(row);
+    });
+
+    const totals = document.createElement("div");
+    totals.className = "result";
+    totals.textContent = `TOTAL: ${totalRolls} ROLLS · ${totalEvents} BROOKSIDE MOMENTS`;
+    container.appendChild(totals);
+  }
+
+  function renderHistory() {
+    const container = document.getElementById("historyList");
+    const history = loadJSON(STORAGE.history, []);
+    container.innerHTML = "";
+
+    if (history.length === 0) {
+      const empty = document.createElement("div");
+      empty.className = "result";
+      empty.textContent = "NO FINISHED ADVENTURES YET";
+      container.appendChild(empty);
       return;
     }
 
+    history.forEach(adventure => {
+      const item = document.createElement("div");
+      item.className = "history-item";
 
-    history.forEach(item => {
+      const totalRolls = adventure.stops.reduce((n, stop) => n + stop.rolls, 0);
+      const totalEvents = adventure.stops.reduce((n, stop) => n + stop.events.length, 0);
 
-      const div =
-        document.createElement(
-          "div"
-        );
+      const name = document.createElement("strong");
+      name.textContent = adventure.doll;
+      item.appendChild(name);
 
-      div.className =
-        "history-item";
+      const route = document.createElement("div");
+      route.textContent = adventure.stops.map(stop => stop.location).join(" → ");
+      item.appendChild(route);
 
-      const result =
-        document.createElement(
-          "div"
-        );
+      const totals = document.createElement("div");
+      totals.textContent = `${formatDate(adventure.startedAt)} · 🎲 ${totalRolls} · ✨ ${totalEvents}`;
+      item.appendChild(totals);
 
-      result.textContent =
-        item.text;
-
-      const time =
-        document.createElement(
-          "small"
-        );
-
-      time.textContent =
-        item.time;
-
-      div.appendChild(
-        result
-      );
-
-      div.appendChild(
-        time
-      );
-
-      container.appendChild(
-        div
-      );
-
+      container.appendChild(item);
     });
   }
 
+  document.getElementById("clearHistory").addEventListener("click", () => {
+    saveJSON(STORAGE.history, []);
+    renderHistory();
+  });
 
-  document
-    .getElementById("clearHistory")
-    .addEventListener(
-      "click",
-      () => {
+  /* ================================
+     STARTUP
+     ================================ */
 
-        try {
-          localStorage.removeItem(
-            HISTORY_KEY
-          );
-        }
-        catch {
-          /* ignore */
-        }
-
-        renderHistory();
-      }
-    );
+  renderSessionStrip();
 
 })();
 </script>
-
 </body>
 </html>
