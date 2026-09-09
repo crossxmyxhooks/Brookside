@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Brookside Call Preview</title>
+<style>
+:root{--ink:#3f3152;--pink:#f6c9df;--green:#dcefd1;--blue:#d7ebf7;--cream:#fffaf2;--purple:#79599a}
+*{box-sizing:border-box}body{margin:0;padding:18px 12px;background:#fff7fb;color:var(--ink);font-family:Arial,sans-serif}.app{max-width:430px;margin:auto}.screen{display:none}.screen.active{display:block}.card,.call-card{border:3px solid var(--ink);border-radius:20px;padding:18px;background:#fff;margin:12px 0;box-shadow:4px 4px 0 var(--pink)}.card.green,.call-card{background:var(--green)}.call-card{text-align:center}.call-avatar{font-size:50px}.call-name{font:700 26px Georgia,serif;margin:8px 0}.call-sub,.label,.who{font-size:10px;letter-spacing:1.2px;text-transform:uppercase;font-weight:900;color:var(--purple)}.choice-grid{display:grid;gap:9px;margin-top:10px}button,.item{width:100%;border:3px solid var(--ink);border-radius:15px;padding:12px;background:#fff;color:var(--ink);font-weight:800;text-align:left;box-shadow:3px 3px 0 var(--ink)}.btn-blue{background:var(--blue)}.btn-cream{background:var(--cream)}.response,.bubble{margin-top:12px;padding:12px;border-radius:12px;border:2px solid var(--ink);line-height:1.4}.response{background:var(--green);font-weight:700}.bubble.me{background:var(--blue);margin-left:12%}.who{display:block;margin-bottom:4px}h1{text-align:center;font:700 30px Georgia,serif}p{text-align:center}.note{font-size:12px;color:#706578}
+</style>
+</head>
+<body>
+<div class="app">
+  <h1>☎️ Someone Is Calling</h1>
+  <p class="note">Branch preview — Accept a call and follow it through multiple choices.</p>
+  <section id="call" class="screen active"><div id="callArea"></div></section>
+</div>
+<script>
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active')}
+function goHome(){openCall()}
+</script>
+<script src="call-conversations-v2.js"></script>
+<script src="call-integration-v2.js"></script>
+<script>openCall();</script>
+</body>
+</html>
