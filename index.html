@@ -1314,6 +1314,10 @@ function chooseMood(mood){
     </div>
     <button class="btn-blue" onclick='revealDrink(${JSON.stringify(drink)},${JSON.stringify(customer)})'>☕ TALIA, MAKE THE DRINK</button>`;
 }
+function isHotDrink(drink){
+  const base=drink.toLowerCase().split(" + ")[0];
+  return !base.startsWith("iced") && base!=="cold brew";
+}
 function drinkSpriteFor(drink){
   const order=drink.toLowerCase();
   const hasWhip=order.includes("whipped cream");
@@ -1323,7 +1327,7 @@ function drinkSpriteFor(drink){
   if((order.includes("iced coffee") || order.includes("cold brew")) && hasWhip) return "assets/paws-iced-coffee-whip.gif";
   if(order.includes("iced latte")) return "assets/paws-iced-latte-milk.gif";
   if(order.includes("iced coffee") || order.includes("cold brew")) return "assets/paws-iced-coffee.gif";
-  if(order.includes("hot") || order.includes("chai") || order.includes("americano") || order.includes("café au lait") || order.includes("mocha")){
+  if(isHotDrink(drink)){
     return Math.random()<.5 ? "assets/paws-hot-coffee.gif" : "assets/paws-hot-coffee-to-go.gif";
   }
   return "assets/paws-iced-coffee.gif";
@@ -1332,6 +1336,9 @@ function revealDrink(drink,customer){
   const price=(4.25+Math.random()*2).toFixed(2);
   const reaction = pick(reactions);
   const drinkSprite=drinkSpriteFor(drink);
+  const taliaServeSprite=isHotDrink(drink)
+    ? `<img class="character-sprite visible" src="assets/talia-hot-drink-handoff.gif" alt="Talia handing over a hot drink">`
+    : "";
   const souvenir = `
     <div class="souvenir">
       <div class="souvenir-title">PAWS COFFEE</div>
@@ -1349,6 +1356,7 @@ function revealDrink(drink,customer){
     <div class="card green">
       <span class="label">Today's creation</span>
       <h3>☕ ${customer}'s Drink</h3>
+      ${taliaServeSprite}
       <div class="drink-sprite-wrap"><img class="drink-sprite" src="${drinkSprite}" alt="${drink} from Paws Coffee"></div>
       <p>${drink}</p>
       <p><strong>$${price}</strong></p>
