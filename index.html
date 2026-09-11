@@ -660,6 +660,17 @@ const characterSprites = {
   "Blair":"assets/blair.gif"
 };
 
+const libraryCheckoutSprites = {
+  "Hallie Jo":"assets/hallie-jo-library-walking.gif",
+  "Delilah":"assets/delilah-library-walking.gif",
+  "Hart Chapman":"assets/hart-chapman-library-walking.gif",
+  "Nevaeh":"assets/nevaeh-library-walking.gif",
+  "Brittney Paige":"assets/brittney-paige-library-walking.gif",
+  "Piper":"assets/piper-library-walking.gif",
+  "Blair":"assets/blair-library-walking.gif",
+  "Winnie":"assets/winnie-library-walking.gif"
+};
+
 const seasonMeta = {
   spring:{label:"Spring",icon:"🌷"},
   summer:{label:"Summer",icon:"☀️"},
@@ -1433,8 +1444,9 @@ function libraryBrowse(){
 }
 function finishBook(title,section){
   const visitor = document.getElementById("libraryVisitor").textContent;
-  const checkoutSprite = visitor === "Hallie Jo"
-    ? `<img class="character-sprite small-sprite visible" src="assets/hallie-jo-library-walking.gif" alt="Hallie Jo walking with her library books">`
+  const checkoutSpriteSrc = libraryCheckoutSprites[visitor];
+  const checkoutSprite = checkoutSpriteSrc
+    ? `<img class="character-sprite small-sprite visible" src="${checkoutSpriteSrc}" alt="${visitor} walking with her library books">`
     : "";
   const souvenir = `
     <div class="souvenir">
